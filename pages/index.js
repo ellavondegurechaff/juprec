@@ -5,14 +5,10 @@ import Image from 'next/image'; // Import the Image component
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css'; // Basic Swiper styles
-// import 'swiper/css/navigation'; // Navigation styles
-
-// Import Swiper core and required modules
-import SwiperCore, { Navigation } from 'swiper';
-
-// Install Swiper modules
-SwiperCore.use([Navigation]);
-
+import 'swiper/css/navigation'; // Navigation styles
+import { Autoplay, Navigation } from 'swiper/modules';
+import SwiperCore from 'swiper';
+SwiperCore.use([Autoplay, Navigation]);
 
 export default function Home() {
 
@@ -113,12 +109,16 @@ export default function Home() {
       {/* Working Groups Section */}
       <section className="text-center">
         <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">Meet the JWGs</h3>
-        <p className="text-sm sm:text-md md:text-sm text-gray-400 mb-4">Swipe to navigate</p>
+        {/* <p className="text-sm sm:text-md md:text-sm text-gray-400 mb-4">Swipe to navigate</p> */}
         <Swiper
           slidesPerView={1}
           spaceBetween={10}
           navigation
           loop
+          autoplay={{
+            delay: 3000, // 1000ms = 1 second
+            disableOnInteraction: false, // autoplay will not be disabled after user interactions
+          }}
           className="mySwiper"
         >
           {workingGroups.map((group, index) => (

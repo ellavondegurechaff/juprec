@@ -214,6 +214,7 @@ export default function Home() {
       <footer className="text-center p-5 border-t border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
         © 2024 JupRecruit Team.
       </footer>
+      <SpeedInsights />
     </div>
   );
 }

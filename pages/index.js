@@ -18,9 +18,9 @@ export default function Home() {
 
   // Define your working groups data.
   const workingGroups = [
-    { title: '', description: 'JUP CWG', image: '/cat1.jpg' },
-    { title: '', description: 'JUP CATDEG WG', image: '/cat2.jpg' },
-    { title: '', description: 'UPLINK WG', image: '/cat3.jpg' },
+    { description: 'JUP CWG', image: '/cat1.jpg' },
+    { description: 'JUP CATDEG WG', image: '/cat2.jpg' },
+    { description: 'UPLINK WG', image: '/cat3.jpg' },
     // ...you can add more items here
   ];
 
@@ -86,8 +86,8 @@ export default function Home() {
               </div>
             </div>
             <div className="flex-1 max-w-xs flex justify-center">
-            <div className="rounded-full overflow-hidden flex items-center justify-center">
-              <img src="/catt_prev_ui.png" alt="Circle Logo" className="w-full h-full object-cover" />
+            <div className="rounded-full overflow-hidden flex items-center justify-center w-full h-full">
+            <Image src="/catt_prev_ui.png" alt="Circle Logo" width={900} height={900} className="object-cover" layout="intrinsic" />
             </div>
           </div>
           </div>

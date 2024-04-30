@@ -2,7 +2,7 @@ import { Inter } from "next/font/google";
 import { useState, useEffect } from 'react';
 const inter = Inter({ subsets: ["latin"] });
 import Image from 'next/image'; // Import the Image component
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css'; // Basic Swiper styles
 import 'swiper/css/navigation'; // Navigation styles

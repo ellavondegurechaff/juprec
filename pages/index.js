@@ -41,15 +41,19 @@ export default function Home() {
   }, []);
 
   return (
-    <div className={`min-h-screen bg-gray-900 text-white ${inter.className}`}>
-      <header className="flex justify-between items-center p-5 border-b border-gray-700">
-        <h1 className="font-bold text-3xl xl:text-xl bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
-          Jupiter Talent Acquisition Group
-        </h1>
-        <nav>
-          <a href="#" className="text-[#C0C7D1] px-4 hover:text-gray-300">Explore</a>
-        </nav>
-      </header>
+  <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
+          <header className="flex justify-between items-center p-5 border-b border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
+      <h1 className="font-bold text-3xl xl:text-xl bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
+        Jupiter Talent Acquisition Group
+      </h1>
+      <nav>
+        {/* "Explore" link updated with glassy button styles */}
+        <a href="your-link-url" className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition cursor-pointer backdrop-blur-md" 
+          style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}>
+          Explore
+        </a>
+      </nav>
+    </header>
 
       {/* Fixed Banner Image with a border that moves with the scroll */}
       <div className="w-full h-64 relative overflow-hidden border-b border-gray-700">
@@ -85,10 +89,17 @@ export default function Home() {
             <h3 className="text-5xl font-bold mb-9 text-left">Meowdy there! Yes, you pawsitively talented cat -</h3>
             <p className="text-left text-lg mb-9">Join our Talent Community Today!</p>
             <div className="flex justify-start items-center gap-4">
-              {/* Create a profile button with updated style */}
-              <button className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-lime-200/[.03] hover:bg-lime-200/10 font-bold transition" style={{ color: 'rgb(217, 249, 157)' }}>Create a profile</button>
-              {/* What's this? button with updated style */}
-              <button className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-lime-200/[.03] hover:bg-lime-200/10 font-bold transition" style={{ color: 'rgb(217, 249, 157)' }}>What's this?</button>
+              {/* Create a profile button with glassy style */}
+              <button className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition font-bold backdrop-blur-md"
+                      style={{ color: 'rgb(217, 249, 157)' }}>
+                Create a profile
+              </button>
+
+              {/* What's this? button with glassy style */}
+              <button className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition font-bold backdrop-blur-md"
+                      style={{ color: 'rgb(217, 249, 157)' }}>
+                What's this?
+              </button>
             </div>
           </div>
           <div className="flex-1 max-w-xs flex justify-center">
@@ -129,32 +140,41 @@ export default function Home() {
         <div className="mb-32"></div> {/* This is the spacer div, you can adjust the value as needed */}
 
 
-      {/* Explore Opportunities Section */}
-      <div className="flex items-center justify-center my-16 mx-5">
-        <div className="flex-1 max-w-lg">
-          <h3 className="text-5xl font-bold mb-9 text-left">What J.U.P. needs now - it might be you.</h3>
-          <p className="text-left text-xl mb-4">J.U.P something opportunity something talent, skills. Explore the planet for opportunities.</p>
-          {/* View all button with updated style */}
-          <button className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-lime-200/[.03] hover:bg-lime-200/10 transition mb-4" style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}>View all</button>
-        </div>
-        <div className="flex-1 max-w-xs flex justify-center">
-          <div className="flex flex-col items-center justify-center space-y-4 ml-56">
-            {/* Job buttons with updated style */}
-            <div className="rounded-lg px-6 py-3 w-80 flex flex-col items-center justify-center" style={{ backgroundColor: 'rgba(217, 249, 157, 0.03)' }}>
-              <div className="text-lg font-bold" style={{ color: 'rgb(217, 249, 157)' }}>Contract Specialist</div>
-              <div className="text-sm" style={{ color: 'rgb(217, 249, 157)' }}>Legal/Compliance, TAWG</div>
-            </div>
-            <div className="rounded-lg px-6 py-3 w-80 flex flex-col items-center justify-center" style={{ backgroundColor: 'rgba(217, 249, 157, 0.03)' }}>
-              <div className="text-lg font-bold" style={{ color: 'rgb(217, 249, 157)' }}>Job Title</div>
-              <div className="text-sm" style={{ color: 'rgb(217, 249, 157)' }}>Category, Working Group</div>
-            </div>
-            <div className="rounded-lg px-6 py-3 w-80 flex flex-col items-center justify-center" style={{ backgroundColor: 'rgba(217, 249, 157, 0.03)' }}>
-              <div className="text-lg font-bold" style={{ color: 'rgb(217, 249, 157)' }}>Job Title</div>
-              <div className="text-sm" style={{ color: 'rgb(217, 249, 157)' }}>Category, Working Group</div>
+        {/* Explore Opportunities Section */}
+        <div className="flex items-center justify-center my-16 mx-5">
+          <div className="flex-1 max-w-lg">
+            <h3 className="text-5xl font-bold mb-9 text-left">What J.U.P. needs now - it might be you.</h3>
+            <p className="text-left text-xl mb-4">J.U.P something opportunity something talent, skills. Explore the planet for opportunities.</p>
+            {/* View all button with updated style */}
+            <button className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition mb-4 backdrop-blur-md" 
+                    style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}>
+              View All
+            </button>
+          </div>
+          
+          <div className="flex-1 max-w-xs flex justify-center">
+            <div className="flex flex-col items-center justify-center space-y-4 ml-56">
+              {/* Job buttons with updated style and hover effect */}
+              <button className="rounded-lg px-6 py-3 w-96 flex flex-col items-center justify-center bg-white/[.20] hover:bg-white/[.30] transition font-bold" 
+              style={{ color: 'rgb(217, 249, 157)' }}>
+              <span className="text-lg">Contract Specialist</span>
+              <span className="text-sm">Legal/Compliance, TAWG</span>
+            </button>
+              
+              <button className="rounded-lg px-6 py-3 w-96 flex flex-col items-center justify-center bg-white/[.20] hover:bg-white/[.30] transition font-bold" 
+              style={{ color: 'rgb(217, 249, 157)' }}>
+              <span className="text-lg">Job Title</span>
+              <span className="text-sm">Category, Working Group</span>
+            </button>
+
+              <button className="rounded-lg px-6 py-3 w-96 flex flex-col items-center justify-center bg-white/[.20] hover:bg-white/[.30] transition font-bold" 
+              style={{ color: 'rgb(217, 249, 157)' }}>
+              <span className="text-lg">Job Title</span>
+              <span className="text-sm">Category, Working Group</span>
+            </button>
             </div>
           </div>
         </div>
-      </div>
 
           <div className="mb-32"></div> {/* This is the spacer div, you can adjust the value as needed */}
 
@@ -193,7 +213,7 @@ export default function Home() {
       </main>
       
 
-      <footer className="text-center p-5 border-t border-gray-700">
+      <footer className="text-center p-5 border-t border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
         © 2024 JupRecruit Team.
       </footer>
     </div>

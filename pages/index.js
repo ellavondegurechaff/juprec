@@ -76,25 +76,34 @@ export default function Home() {
             <div className="border-t border-b border-gray-700 my-16"></div>
           </div>
 
-          {/* Talent Community Section */}
-          <div className="flex items-center justify-center my-16 mx-5">
-            <div className="flex-1 max-w-lg">
-              <h3 className="text-5xl font-bold mb-9 text-left">Meowdy there! Yes, you pawsitively talented cat -</h3>
-              <div className="flex justify-start items-center gap-4">
-                <button className="bg-blue-600 px-6 py-3 rounded font-bold hover:bg-blue-700 transition">Create a profile</button>
-                <button className="bg-gray-600 px-6 py-3 rounded font-bold hover:bg-gray-700 transition">What's this?</button>
-              </div>
+          <div className="mb-10"></div> {/* This is the spacer div, you can adjust the value as needed */}
+
+
+        {/* Talent Community Section */}
+        <div className="flex items-center justify-center my-16 mx-5">
+          <div className="flex-1 max-w-lg">
+            <h3 className="text-5xl font-bold mb-9 text-left">Meowdy there! Yes, you pawsitively talented cat -</h3>
+            <p className="text-left text-lg mb-9">Join our Talent Community Today!</p>
+            <div className="flex justify-start items-center gap-4">
+              {/* Create a profile button with updated style */}
+              <button className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-lime-200/[.03] hover:bg-lime-200/10 font-bold transition" style={{ color: 'rgb(217, 249, 157)' }}>Create a profile</button>
+              {/* What's this? button with updated style */}
+              <button className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-lime-200/[.03] hover:bg-lime-200/10 font-bold transition" style={{ color: 'rgb(217, 249, 157)' }}>What's this?</button>
             </div>
-            <div className="flex-1 max-w-xs flex justify-center">
+          </div>
+          <div className="flex-1 max-w-xs flex justify-center">
             <div className="rounded-full overflow-hidden flex items-center justify-center w-full h-full">
-            <Image src="/catt_prev_ui.png" alt="Circle Logo" width={900} height={900} className="object-cover" layout="intrinsic" />
+              <Image src="/catt_prev_ui.png" alt="Circle Logo" width={900} height={900} className="object-cover" layout="intrinsic" />
             </div>
           </div>
-          </div>
+        </div>
+
+          <div className="mb-32"></div> {/* This is the spacer div, you can adjust the value as needed */}
+
 
           {/* Working Groups Section */}
           <section className="my-16">
-          <h3 className="text-3xl font-bold text-center mb-6">Meet the JWGs</h3>
+          <h3 className="text-4xl font-bold text-center mb-6">Meet the JWGs</h3>
           <Swiper
             slidesPerView={3} // Show three slides at a time
             spaceBetween={30} // Space between slides
@@ -117,47 +126,62 @@ export default function Home() {
           </Swiper>
         </section>
 
-        {/* Explore Opportunities Section */}
-        <div className="flex items-center justify-center my-16 mx-5"> {/* Aligning spacing with the Talent Community Section */}
-          <div className="flex-1 max-w-lg">
-            <h3 className="text-5xl font-bold mb-9 text-left">What J.U.P. needs now - it might be you.</h3>
-            <p className="text-left text-xl mb-4">J.U.P something opportunity something talent, skills. Explore the planet for opportunities.</p>
-            <button className="bg-blue-600 px-4 py-2 rounded font-bold text-white hover:bg-blue-700 transition mb-4">View all</button> {/* Adjusted button size */}
-          </div>
-          <div className="flex-1 max-w-xs flex justify-center"> {/* Ensuring alignment and layout consistency */}
-            <div className="flex flex-col items-center justify-center space-y-4"> {/* Adding vertical spacing between buttons */}
-              <div className="bg-blue-500 rounded-lg px-4 py-2 w-48 flex flex-col items-center justify-center"> {/* Adjusted button width and padding */}
-                <div className="text-white text-lg font-bold">Contract Specialist</div>
-                <div className="text-white text-sm">Legal/Compliance, TAWG</div>
-              </div>
-              <div className="bg-blue-500 rounded-lg px-4 py-2 w-48 flex flex-col items-center justify-center">
-                <div className="text-white text-lg font-bold">Job Title</div>
-                <div className="text-white text-sm">Category, Working Group</div>
-              </div>
-              <div className="bg-blue-500 rounded-lg px-4 py-2 w-48 flex flex-col items-center justify-center">
-                <div className="text-white text-lg font-bold">Job Title</div>
-                <div className="text-white text-sm">Category, Working Group</div>
-              </div>
+        <div className="mb-32"></div> {/* This is the spacer div, you can adjust the value as needed */}
+
+
+      {/* Explore Opportunities Section */}
+      <div className="flex items-center justify-center my-16 mx-5">
+        <div className="flex-1 max-w-lg">
+          <h3 className="text-5xl font-bold mb-9 text-left">What J.U.P. needs now - it might be you.</h3>
+          <p className="text-left text-xl mb-4">J.U.P something opportunity something talent, skills. Explore the planet for opportunities.</p>
+          {/* View all button with updated style */}
+          <button className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-lime-200/[.03] hover:bg-lime-200/10 transition mb-4" style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}>View all</button>
+        </div>
+        <div className="flex-1 max-w-xs flex justify-center">
+          <div className="flex flex-col items-center justify-center space-y-4 ml-56">
+            {/* Job buttons with updated style */}
+            <div className="rounded-lg px-6 py-3 w-80 flex flex-col items-center justify-center" style={{ backgroundColor: 'rgba(217, 249, 157, 0.03)' }}>
+              <div className="text-lg font-bold" style={{ color: 'rgb(217, 249, 157)' }}>Contract Specialist</div>
+              <div className="text-sm" style={{ color: 'rgb(217, 249, 157)' }}>Legal/Compliance, TAWG</div>
+            </div>
+            <div className="rounded-lg px-6 py-3 w-80 flex flex-col items-center justify-center" style={{ backgroundColor: 'rgba(217, 249, 157, 0.03)' }}>
+              <div className="text-lg font-bold" style={{ color: 'rgb(217, 249, 157)' }}>Job Title</div>
+              <div className="text-sm" style={{ color: 'rgb(217, 249, 157)' }}>Category, Working Group</div>
+            </div>
+            <div className="rounded-lg px-6 py-3 w-80 flex flex-col items-center justify-center" style={{ backgroundColor: 'rgba(217, 249, 157, 0.03)' }}>
+              <div className="text-lg font-bold" style={{ color: 'rgb(217, 249, 157)' }}>Job Title</div>
+              <div className="text-sm" style={{ color: 'rgb(217, 249, 157)' }}>Category, Working Group</div>
             </div>
           </div>
         </div>
+      </div>
 
-          {/* The Process Section */}
-          <section className="my-16 text-center">
-            <h3 className="text-3xl font-bold mb-6">The Process</h3>
-            <div className="flex justify-center items-center gap-4 mb-4">
-              <span className="h-1 w-16 bg-gray-300"></span>
-              <div>Apply</div>
-              <span className="h-1 w-16 bg-gray-300"></span>
-              <div>Interview</div>
-              <span className="h-1 w-16 bg-gray-300"></span>
-              <div>Hire</div>
-              <span className="h-1 w-16 bg-gray-300"></span>
-              <div>Grow</div>
-              <span className="h-1 w-16 bg-gray-300"></span>
-            </div>
-            <div className="border-t border-gray-700 my-16"></div>
-          </section>
+          <div className="mb-32"></div> {/* This is the spacer div, you can adjust the value as needed */}
+
+            {/* The Process Section */}
+            <section className="my-16 mx-5">
+              <div className="flex items-center justify-center">
+                <div className="flex-1 max-w-lg">
+                  <h3 className="text-5xl font-bold mb-9 text-left">The Process</h3>
+                  <p className="text-left text-xl mb-4">Follow these steps to get started on your journey.</p>
+                  <div className="flex justify-start items-center gap-8"> {/* Gap adjusted for visual spacing */}
+                    {/* Line with Steps */}
+                    <span className="h-1 flex-grow bg-gray-300"></span>
+                    <div className="text-white">Apply</div>
+                    <span className="h-1 flex-grow bg-gray-300"></span>
+                    <div className="text-white">Interview</div>
+                    <span className="h-1 flex-grow bg-gray-300"></span>
+                    <div className="text-white">Hire</div>
+                    <span className="h-1 flex-grow bg-gray-300"></span>
+                    <div className="text-white">Grow</div>
+                    <span className="h-1 flex-grow bg-gray-300"></span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div className="mb-32"></div> {/* This is the spacer div, you can adjust the value as needed */}
+
 
             {/* About Us Section */}
             <section className="my-16 text-center">
@@ -170,7 +194,7 @@ export default function Home() {
       
 
       <footer className="text-center p-5 border-t border-gray-700">
-        © 2024 JupRecruit. All rights reserved.
+        © 2024 JupRecruit Team.
       </footer>
     </div>
   );

@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import { useState, useEffect } from 'react';
 const inter = Inter({ subsets: ["latin"] });
+import Image from 'next/image'; // Import the Image component
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css'; // Basic Swiper styles
@@ -47,22 +48,20 @@ export default function Home() {
         </h1>
         <nav>
           <a href="#" className="text-[#C0C7D1] px-4 hover:text-gray-300">Explore</a>
-          {/* <a href="#" className="text-[#C0C7D1] px-4 hover:text-gray-300">Jobs</a>
-          <a href="#" className="text-[#C0C7D1] px-4 hover:text-gray-300">About</a> */}
         </nav>
       </header>
 
       {/* Fixed Banner Image with a border that moves with the scroll */}
       <div className="w-full h-64 relative overflow-hidden border-b border-gray-700">
-      <div
-        className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
-        style={{ 
-          backgroundImage: `url(/cat.jpg)`,
-          backgroundSize: 'cover',
-          transform: `translateY(${offsetY * 0.5}px) scale(1.2)`, // Scaled up to ensure it covers the space when it moves
-        }}
-      />
-    </div>
+        <div
+          className="absolute top-0 left-0 w-full h-full"
+          style={{ 
+            backgroundImage: `url(/cat.jpg)`,
+            backgroundSize: 'cover',
+            transform: `translateY(${offsetY * 0.5}px) scale(1.2)`,
+          }}
+        />
+      </div>
       <main className="space-y-24">
         <div className="text-center py-16">
           <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
@@ -107,7 +106,7 @@ export default function Home() {
               <SwiperSlide key={index}>
                 <div className="flex flex-col items-center justify-center p-4">
                   <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-500">
-                    <img src={group.image} alt={group.title} className="w-full h-full object-cover"/>
+                    <Image src={group.image} alt={group.title} width={160} height={160} layout="responsive" />
                   </div>
                   <h4 className="mt-4 text-xl font-bold">{group.title}</h4>
                   <p className="text-sm text-gray-300">{group.description}</p>

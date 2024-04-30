@@ -5,7 +5,7 @@ import Image from 'next/image'; // Import the Image component
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css'; // Basic Swiper styles
-import 'swiper/css/navigation'; // Navigation styles
+// import 'swiper/css/navigation'; // Navigation styles
 
 // Import Swiper core and required modules
 import SwiperCore, { Navigation } from 'swiper';
@@ -18,9 +18,9 @@ export default function Home() {
 
   // Define your working groups data.
   const workingGroups = [
-    { description: 'JUP CWG', image: '/cat1.jpg' },
-    { description: 'JUP CATDEG WG', image: '/cat2.jpg' },
-    { description: 'UPLINK WG', image: '/cat3.jpg' },
+    { title: 'JUP CWG', image: '/cat1.jpg', placeholder: 'Placeholder 1 text for first circle' },
+    { title: 'JUP CATDET WG',  image: '/cat2.jpg', placeholder: 'Placeholder 2 text for second circle' },
+    { title: 'UPLINK WG',  image: '/cat3.jpg', placeholder: 'Placeholder 3 text for third circle' },
     // ...you can add more items here
   ];
 
@@ -41,19 +41,18 @@ export default function Home() {
   }, []);
 
   return (
-  <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
-          <header className="flex justify-between items-center p-5 border-b border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
-      <h1 className="font-bold text-3xl xl:text-xl bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
-        Jupiter Talent Acquisition Group
-      </h1>
-      <nav>
-      {/* "Explore" link updated with glassy button styles */}
-      <a href="your-link-url" className="p-3 lg:px-5 lg:py-4 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition cursor-pointer backdrop-blur-md" 
-        style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}>
-        Explore
-      </a>
-      </nav>
-    </header>
+    <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
+      <header className="flex justify-between items-center p-5 border-b border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-xl font-bold bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
+          Jupiter Talent Acquisition Group
+        </h1>
+        <nav>
+          <a href="#explore" className="p-2 sm:p-3 md:px-5 md:py-4 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition cursor-pointer backdrop-blur-md" 
+            style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}>
+            Explore
+          </a>
+        </nav>
+      </header>
 
       {/* Fixed Banner Image with a border that moves with the scroll */}
       <div className="w-full h-64 relative overflow-hidden border-b border-gray-700">
@@ -66,17 +65,16 @@ export default function Home() {
           }}
         />
       </div>
-      <main className="space-y-24">
-        <div className="text-center py-16">
-          <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
+      <main className="px-5 sm:px-10 md:px-20 space-y-8 sm:space-y-12 md:space-y-24 py-10">
+        <div className="text-center">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
             JUPRecruit
           </h2>
-          {/* Mission Section */}
           <div>
-            <h3 className="text-2xl font-bold mb-1 bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
               Mission Directive
             </h3>
-            <p className="text-sm text-gray-400 mb-4">To discover talented catdets and connect them with meaningful opportunites in the cosmos.</p>
+            <p className="text-sm sm:text-md md:text-lg text-gray-400 mb-4">To discover talented catdets and connect them with meaningful opportunities in the cosmos.</p>
             <div className="border-t border-b border-gray-700 my-16"></div>
           </div>
 
@@ -104,7 +102,7 @@ export default function Home() {
           </div>
           <div className="flex-1 max-w-xs flex justify-center">
             <div className="rounded-full overflow-hidden flex items-center justify-center w-full h-full">
-              <Image src="/catt_prev_ui.png" alt="Circle Logo" width={900} height={900} className="object-cover" layout="intrinsic" />
+              <Image src="/catt_prev_ui.png" alt="Circle Logo" width={900} height={900} className="object-cover" />
             </div>
           </div>
         </div>
@@ -112,30 +110,30 @@ export default function Home() {
           <div className="mb-32"></div> {/* This is the spacer div, you can adjust the value as needed */}
 
 
-          {/* Working Groups Section */}
-          <section className="my-16">
-          <h3 className="text-4xl font-bold text-center mb-6">Meet the JWGs</h3>
-          <Swiper
-            slidesPerView={3} // Show three slides at a time
-            spaceBetween={30} // Space between slides
-            navigation // Enable navigation
-            loop // Enable infinite loop
-            className="mySwiper" // Custom class name for styling
-          >
-            {workingGroups.map((group, index) => (
-              <SwiperSlide key={index}>
-                <div className="flex flex-col items-center justify-center p-4">
-                  <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-500">
-                    <Image src={group.image} alt={group.title} width={160} height={160} layout="responsive" />
-                  </div>
-                  <h4 className="mt-4 text-xl font-bold">{group.title}</h4>
-                  <p className="text-sm text-gray-300">{group.description}</p>
-                  <p className="text-xs text-gray-500 mt-2">Placeholder for additional description.</p>
+      {/* Working Groups Section */}
+      <section className="text-center">
+        <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">Meet the JWGs</h3>
+        <p className="text-sm sm:text-md md:text-sm text-gray-400 mb-4">Swipe to navigate</p>
+        <Swiper
+          slidesPerView={1}
+          spaceBetween={10}
+          navigation
+          loop
+          className="mySwiper"
+        >
+          {workingGroups.map((group, index) => (
+            <SwiperSlide key={index}>
+              <div className="flex flex-col items-center justify-center p-4">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-blue-500">
+                  <Image src={group.image} alt={group.title} width={160} height={160} className="object-cover" />
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
+                <h4 className="mt-4 text-xl font-bold">{group.title}</h4>
+                <p className="text-sm mt-2">{group.placeholder}</p>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </section>
 
         <div className="mb-32"></div> {/* This is the spacer div, you can adjust the value as needed */}
 
@@ -205,7 +203,7 @@ export default function Home() {
 
             {/* About Us Section */}
             <section className="my-16 text-center">
-            <h3 className="text-3xl font-bold mb-6">About Us</h3>
+            <h3 className="text-4xl font-bold mb-6">About Us</h3>
             <p className="text-lg text-gray-400 mb-4">Lorem Ipsum</p>
           </section>
 

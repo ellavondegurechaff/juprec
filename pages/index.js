@@ -1,7 +1,10 @@
 import { Inter } from "next/font/google";
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 const inter = Inter({ subsets: ["latin"] });
 import Image from 'next/image';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { FaDiscord } from 'react-icons/fa';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -11,6 +14,7 @@ import SwiperCore from 'swiper';
 SwiperCore.use([Autoplay, Navigation]);
 
 export default function Home() {
+  const { data: session } = useSession();
   const workingGroups = [
     { title: 'JUP CWG', image: '/cat1.jpg', placeholder: 'Placeholder 1 text for first circle' },
     { title: 'JUP CATDET WG', image: '/cat2.jpg', placeholder: 'Placeholder 2 text for second circle' },
@@ -32,17 +36,34 @@ export default function Home() {
 
   return (
     <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
-      <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
-        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-2xl font-bold bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
-          Jupiter Talent Acquisition Group
-        </h1>
-        <nav>
-          <a href="#explore" className="p-2 sm:p-3 md:px-5 md:py-4 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition cursor-pointer backdrop-blur-md" 
-            style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}>
-            Explore
-          </a>
-        </nav>
-      </header>
+    <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
+      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-2xl font-bold bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
+        Jupiter Talent Acquisition Group
+      </h1>
+      <nav>
+        {session ? (
+          <div className="flex items-center space-x-4">
+            <span className="text-white">{session.user.name}</span>
+            <button
+              onClick={() => signOut()}
+              className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-300"
+            >
+              Sign Out
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => signIn('discord')}
+            className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300"
+          >
+            <div className="flex items-center">
+              <FaDiscord className="mr-2" />
+              <span>Login with Discord</span>
+            </div>
+          </button>
+        )}
+      </nav>
+    </header>
 
       <div className="w-full h-64 relative overflow-hidden border-b border-gray-700">
         <div
@@ -75,10 +96,11 @@ export default function Home() {
             <h3 className="text-4xl md:text-5xl font-bold mb-9">Meowdy there! Yes, you pawsitively talented cat -</h3>
             <p className="text-lg md:text-xl mb-9">Join our Talent Community Today!</p>
             <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-4">
-              <button className="px-5 py-3 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition font-bold backdrop-blur-md"
-                      style={{ color: 'rgb(217, 249, 157)' }}>
-                Create a profile
-              </button>
+                <Link href="/form" legacyBehavior>
+                  <a className="px-5 py-3 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition font-bold backdrop-blur-md" style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}>
+                    Create a Profile
+                  </a>
+                </Link>
               <button className="px-5 py-3 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition font-bold backdrop-blur-md"
                       style={{ color: 'rgb(217, 249, 157)' }}>
                 What's this?
@@ -122,16 +144,21 @@ export default function Home() {
 
         {/* Explore Opportunities Section */}
         <div className="flex flex-col md:flex-row items-center justify-center my-16 mx-5">
-  <div className="flex-1 max-w-lg space-y-4">
-    <div className="text-center md:text-left space-y-4">
-      <h3 className="text-3xl md:text-5xl font-bold">What J.U.P. needs now - it might be you.</h3>
-      <p className="text-center md:text-left text-md md:text-xl">J.U.P something opportunity something talent, skills. Explore the planet for opportunities.</p>
-      <button className="px-5 py-3 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition backdrop-blur-md"
-              style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}>
-        View All
-      </button>
-    </div>
-  </div>
+          <div className="flex-1 max-w-lg space-y-4">
+            <div className="text-center md:text-left space-y-4">
+              <h3 className="text-3xl md:text-5xl font-bold">What J.U.P. needs now - it might be you.</h3>
+              <p className="text-center md:text-left text-md md:text-xl">J.U.P something opportunity something talent, skills. Explore the planet for opportunities.</p>
+              <div className="flex justify-center md:justify-start">  {/* Ensures button alignment on mobile and desktop */}
+                <Link href="/jobs" legacyBehavior>
+                  <a className="px-5 py-3 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition duration-150 ease-in-out font-bold backdrop-blur-md"
+                    style={{ color: 'rgb(217, 249, 157)' }}>
+                    View All
+                  </a>
+                </Link>
+              </div>
+            </div>
+          </div>
+
 
           <div className="flex-1 max-w-xs mt-8 md:mt-0 md:ml-10 space-y-4">
             {/* Job buttons with updated style and hover effect */}

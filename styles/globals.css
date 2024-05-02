@@ -31,3 +31,164 @@ body {
     text-wrap: balance;
   }
 }
+
+.bg-v2-lily-5 {
+  background-color: rgba(232, 249, 255, 0.05);
+}
+
+.overflow-auto {
+  overflow: auto
+}
+
+.overflow-hidden {
+  overflow: hidden
+}
+
+.\!overflow-visible {
+  overflow: visible!important
+}
+
+.overflow-y-auto {
+  overflow-y: auto
+}
+
+.rounded-3xl {
+  border-radius: 1.5rem
+}
+
+.rounded-\[20px\] {
+  border-radius: 20px
+}
+
+.rounded-\[24px\] {
+  border-radius: 24px
+}
+
+.rounded-full {
+  border-radius: 9999px
+}
+
+.rounded-lg {
+  border-radius: .5rem
+}
+
+.rounded-md {
+  border-radius: .375rem
+}
+
+.rounded-xl {
+  border-radius: .75rem
+}
+
+.border {
+  border-width: 1px
+}
+
+.border-2 {
+  border-width: 2px
+}
+
+.border-b {
+  border-bottom-width: 1px
+}
+
+.border-none {
+  border-style: none
+}
+
+.border-secondary\/10 {
+  border-color: rgba(0,190,240,.1)
+}
+
+.border-secondary\/20 {
+  border-color: rgba(0,190,240,.2)
+}
+
+.border-v2-lily\/10 {
+  border-color: rgba(232,249,255,.1)
+}
+
+.border-v2-lily\/20 {
+  border-color: rgba(232,249,255,.2)
+}
+
+.border-v2-lily\/5 {
+  border-color: rgba(232,249,255,.05)
+}
+
+.border-v2-primary\/20 {
+  border-color: hsla(83,81%,73%,.2)
+}
+
+.border-warning\/20 {
+  border-color: rgba(250,166,60,.2)
+}
+
+.\!bg-transparent {
+  background-color: transparent!important
+}
+
+.bg-\[\#131C25\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(19 28 37/var(--tw-bg-opacity))
+}
+
+.bg-\[\#151A1F\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(21 26 31/var(--tw-bg-opacity))
+}
+
+.bg-\[\#1B2229\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(27 34 41/var(--tw-bg-opacity))
+}
+
+.bg-black {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0/var(--tw-bg-opacity))
+}
+
+.bg-black\/25 {
+  background-color: rgba(0,0,0,.25)
+}
+
+.bg-jupiter-dark {
+  --tw-bg-opacity: 1;
+  background-color: rgb(41 42 51/var(--tw-bg-opacity))
+}
+
+.bg-secondary\/5 {
+  background-color: rgba(0,190,240,.05)
+}
+
+.bg-v2-lily\/5 {
+  background-color: rgba(232,249,255,.05)
+}
+
+.bg-v2-lily\/\[0\.02\] {
+  background-color: rgba(232,249,255,.02)
+}
+
+.bg-v2-primary {
+  --tw-bg-opacity:1;
+  background-color:rgb(199 242 132/var(--tw-bg-opacity));
+}
+
+.bg-warning\/5 {
+  background-color: rgba(250,166,60,.05)
+}
+
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255/var(--tw-bg-opacity))
+}
+
+.text-v2-lily\/50{color:rgba(232,249,255,.5)}
+
+.bg-v2-lily\/10 {
+  background-color: rgba(232, 249, 255, 0.1);
+}
+
+.enabled\:hover\:bg-v2-lily\/10:hover:enabled {
+  background-color: rgba(232, 249, 255, 0.1);
+}

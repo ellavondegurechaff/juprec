@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Inter } from 'next/font/google';
 import { FaDiscord, FaTwitter, FaLinkedin, FaUpload, FaTimes } from 'react-icons/fa';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { SessionProvider, useSession, signIn } from 'next-auth/react';
+import { SessionProvider, useSession, signIn, signOut } from 'next-auth/react';
+import { useDropzone } from 'react-dropzone';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -61,7 +62,7 @@ const Modal = ({ isOpen, onClose, title, options, selectedOptions, onOptionChang
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 backdrop-filter backdrop-blur-md">
       <div className="bg-gray-800 rounded-lg w-96 p-6">
         <h3 className="text-xl font-semibold mb-4">{title}</h3>
         <div className="space-y-2">
@@ -106,6 +107,44 @@ export default function ProfileForm() {
   const [showExpertiseModal, setShowExpertiseModal] = useState(false);
   const [showInterestsModal, setShowInterestsModal] = useState(false);
   const [showLanguagesModal, setShowLanguagesModal] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [fileError, setFileError] = useState(null);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg'],
+      'application/pdf': ['.pdf'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+    },
+    maxFiles: 1,
+    onDrop: (acceptedFiles, rejectedFiles) => {
+      if (rejectedFiles.length > 0) {
+        setFileError('Please upload a valid file type (PNG, JPG, PDF, DOCX).');
+      } else {
+        setSelectedFile(acceptedFiles[0]);
+        setFileError(null);
+      }
+    },
+  });
+
+  const removeFile = () => {
+    setSelectedFile(null);
+  };
+  const validateForm = () => {
+    const newErrors = {};
+  
+    if (!name) newErrors.name = 'Name is required';
+    if (expertise.length === 0) newErrors.expertise = 'Please select at least one area of expertise';
+    if (!experience) newErrors.experience = 'Experience is required';
+    if (interests.length === 0) newErrors.interests = 'Please select at least one area of interest';
+    if (!talents) newErrors.talents = 'Talents / Hobbies are required';
+    if (languages.length === 0) newErrors.languages = 'Please select at least one language';
+    if (!timezone) newErrors.timezone = 'Timezone is required';
+    if (!description) newErrors.description = 'Description is required';
+  
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleExpertiseChange = (selectedOption) => {
     if (expertise.includes(selectedOption)) {
@@ -135,49 +174,77 @@ export default function ProfileForm() {
     setSelectedFile(e.target.files[0]);
   };
 
+  const uploadFileToDrive = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+  
+      const response = await fetch('/api/uploadToDrive', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (response.ok) {
+        console.log('File uploaded to Google Drive successfully');
+      } else {
+        const errorData = await response.json();
+        throw new Error(`Failed to upload file to Google Drive: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error('Error uploading file to Google Drive:', error);
+      alert('Failed to upload file to Google Drive.');
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!session) {
-        setShowPopup(true);
-        return;
-      }
+      setShowPopup(true);
+      return;
+    }
   
-    // Collect all the form data into an object
-    const formData = {
-      name,
-      expertise,
-      experience,
-      interests,
-      talents,
-      languages,
-      timezone,
-      description,
-      discord,
-      twitter,
-      linkedin
-    };
+    if (!validateForm()) return;
   
-    // Use fetch to send the form data to your API route
     try {
+    // Upload file to Google Drive
+    if (selectedFile) {
+      await uploadFileToDrive(selectedFile);
+    }
+  
+      // Collect all the form data into an object
+      const formData = {
+        name,
+        expertise,
+        experience,
+        interests,
+        talents,
+        languages,
+        timezone,
+        description,
+        discord,
+        twitter,
+        linkedin,
+      };
+  
+      // Use fetch to send the form data to your API route
       const response = await fetch('/api/submitForm', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ data: formData })
+        body: JSON.stringify({ data: formData }),
       });
   
       if (response.ok) {
         const result = await response.json();
         console.log('Form data successfully submitted:', result);
-        alert('Form submitted successfully!'); // or handle the success case in a more user-friendly way
+        alert('Form submitted successfully!');
       } else {
         throw new Error('Form submission failed');
       }
     } catch (error) {
       console.error('Failed to submit form:', error);
-      alert('Failed to submit form.'); // or display the error message on the UI
+      alert('Failed to submit form.');
     }
   };
 
@@ -209,6 +276,11 @@ export default function ProfileForm() {
           )}
         </nav>
       </header>
+      {!session && (
+        <div className="max-w-[600px] mx-auto mt-[96px] p-6 rounded-xl px-4 py-2.5 flex items-center justify-center space-x-2 text-jupiter-red text-sm font-semibold border border-warning/20 bg-warning/5 disabled:opacity-40 enabled:hover:bg-v2-primary/10 transition duration-300">
+          You are required to link your Discord to fill up the form.
+        </div>
+      )}
 
             {/* Modal for Expertise Selection */}
         <Modal
@@ -240,62 +312,69 @@ export default function ProfileForm() {
         onOptionChange={handleLanguagesChange}
       />
 
-      <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[600px] mx-auto mt-4 p-20 rounded-xl bg-[#1B2229]">
         <h2 className="text-3xl font-extrabold text-center mb-8 bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
           Talent Profile Form
         </h2>
+        
+        {/* <hr class="w-full h-[1px] bg-v2-lily-5 border-none"></hr> */}
+        
         <form onSubmit={handleSubmit} className="space-y-8">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-300">
               Name
             </label>
             <div className="mt-1">
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2"
-              />
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+              disabled={!session}
+            />
+            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
           </div>
 
-          <div>
-            <label htmlFor="expertise" className="block text-sm font-medium text-gray-300">
-              Areas of Expertise
-            </label>
-            <div className="mt-1">
-              <button
-                type="button"
-                className="px-4 py-2 rounded-md bg-gray-700 text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={() => setShowExpertiseModal(true)}
-              >
-                Select Expertise
-              </button>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {expertise.map((option) => (
-                  <span
-                    key={option}
-                    className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
+        <div>
+          <label htmlFor="expertise" className="text-sm text-v2-lily/50 font-medium">
+            Areas of Expertise
+          </label>
+          <div className="mt-1">
+          <button
+            type="button"
+            className="px-3 py-1.5 rounded-md flex items-center justify-center space-x-1 text-v2-lily text-xs font-semibold border border-v2-lily/20 bg-v2-lily/5 disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:bg-v2-lily/10 transition duration-300"
+            onClick={() => setShowExpertiseModal(true)}
+            disabled={!session}
+          >
+            Select Expertise
+          </button>
+          {errors.expertise && <p className="text-red-500 text-sm mt-1">{errors.expertise}</p>}
+            <div className="mt-2 flex flex-wrap gap-2">
+              {expertise.map((option) => (
+                <span
+                  key={option}
+                  className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
+                >
+                  {option}
+                  <button
+                    type="button"
+                    className="flex-shrink-0 ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:outline-none focus:bg-indigo-500 focus:text-white"
+                    onClick={() => handleExpertiseChange(option)}
                   >
-                    {option}
-                    <button
-                      type="button"
-                      className="flex-shrink-0 ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:outline-none focus:bg-indigo-500 focus:text-white"
-                      onClick={() => handleExpertiseChange(option)}
-                    >
-                      <span className="sr-only">Remove {option}</span>
-                      <FaTimes className="h-2 w-2" />
-                    </button>
-                  </span>
-                ))}
-              </div>
+                    <span className="sr-only">Remove {option}</span>
+                    <FaTimes className="h-2 w-2" />
+                  </button>
+                </span>
+              ))}
             </div>
           </div>
+        </div>
 
           <div>
-            <label htmlFor="experience" className="block text-sm font-medium text-gray-300">
+            <label htmlFor="experience" className="text-sm text-v2-lily/50 font-medium">
               Experience
             </label>
             <div className="mt-1">
@@ -304,7 +383,8 @@ export default function ProfileForm() {
                 id="experience"
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
-                className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2"
+                className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                disabled={!session}
               >
                 <option value="">Select experience</option>
                 {ExperienceOptions.map((option) => (
@@ -317,17 +397,19 @@ export default function ProfileForm() {
           </div>
 
           <div>
-            <label htmlFor="interests" className="block text-sm font-medium text-gray-300">
+            <label htmlFor="interests" className="text-sm text-v2-lily/50 font-medium0">
               Areas of Interest
             </label>
             <div className="mt-1">
-              <button
+            <button
                 type="button"
-                className="px-4 py-2 rounded-md bg-gray-700 text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="px-3 py-1.5 rounded-md flex items-center justify-center space-x-1 text-v2-lily text-xs font-semibold border border-v2-lily/20 bg-v2-lily/5 disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:bg-v2-lily/10 transition duration-300"
                 onClick={() => setShowInterestsModal(true)}
+                disabled={!session}
               >
                 Select Interests
               </button>
+              {errors.interests && <p className="text-red-500 text-sm mt-1">{errors.interests}</p>}
               <div className="mt-2 flex flex-wrap gap-2">
                 {interests.map((option) => (
                   <span
@@ -350,33 +432,36 @@ export default function ProfileForm() {
           </div>
 
           <div>
-            <label htmlFor="talents" className="block text-sm font-medium text-gray-300">
-              Talents/Hobbies
+            <label htmlFor="talents" className="text-sm text-v2-lily/50 font-medium">
+              Talents / Hobbies
             </label>
             <div className="mt-1">
-              <input
-                type="text"
-                name="talents"
-                id="talents"
-                value={talents}
-                onChange={(e) => setTalents(e.target.value)}
-                className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2"
-              />
+            <input
+              type="text"
+              name="talents"
+              id="talents"
+              value={talents}
+              onChange={(e) => setTalents(e.target.value)}
+              className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+              disabled={!session}
+            />
+            {errors.talents && <p className="text-red-500 text-sm mt-1">{errors.talents}</p>}
             </div>
           </div>
 
           <div>
-            <label htmlFor="languages" className="block text-sm font-medium text-gray-300">
+            <label htmlFor="languages" className="text-sm text-v2-lily/50 font-medium">
               Languages
             </label>
             <div className="mt-1">
-              <button
-                type="button"
-                className="px-4 py-2 rounded-md bg-gray-700 text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={() => setShowLanguagesModal(true)}
-              >
-                Select Languages
-              </button>
+            <button
+            type="button"
+            className="px-3 py-1.5 rounded-md flex items-center justify-center space-x-1 text-v2-lily text-xs font-semibold border border-v2-lily/20 bg-v2-lily/5 disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:bg-v2-lily/10 transition duration-300"
+            onClick={() => setShowLanguagesModal(true)}
+            disabled={!session}
+          >
+            Select Languages
+          </button>
               <div className="mt-2 flex flex-wrap gap-2">
                 {languages.map((option) => (
                   <span
@@ -386,7 +471,7 @@ export default function ProfileForm() {
                     {option}
                     <button
                       type="button"
-                      className="flex-shrink-0 ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:outline-none focus:bg-indigo-500 focus:text-white"
+                      className="flex-shrink-0 ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:outline-none focus:bg-indigo-500 focus:text-white "
                       onClick={() => handleLanguagesChange(option)}
                     >
                       <span className="sr-only">Remove {option}</span>
@@ -399,47 +484,51 @@ export default function ProfileForm() {
           </div>
 
           <div>
-            <label htmlFor="timezone" className="block text-sm font-medium text-gray-300">
+            <label htmlFor="timezone" className="text-sm text-v2-lily/50 font-medium">
               Timezone
             </label>
             <div className="mt-1">
-              <select
-                name="timezone"
-                id="timezone"
-                value={timezone}
-                onChange={(e) => setTimezone(e.target.value)}
-                className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2"
-              >
-                <option value="">Select timezone</option>
-                {TimezoneOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
+            <select
+            name="timezone"
+            id="timezone"
+            value={timezone}
+            onChange={(e) => setTimezone(e.target.value)}
+            className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+            disabled={!session}
+          >
+            <option value="">Select timezone</option>
+            {TimezoneOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
             </div>
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-300">
-              Description/Introduction
+            <label htmlFor="description" className="text-sm text-v2-lily/50 font-medium">
+              Description / Introduction
             </label>
             <div className="mt-1">
-              <textarea
-                name="description"
-                id="description"
-                rows={4}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2"
-              />
+            <textarea
+              name="description"
+              id="description"
+              rows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+              disabled={!session}
+            />
+            {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
             </div>
           </div>
+
           <div>
             <label htmlFor="socials" className="block text-sm font-medium text-gray-300">
               Socials
             </label>
-            <div className="mt-1 flex space-x-4">
+            <div className="mt-1 grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="flex items-center">
                 <FaDiscord className="text-xl text-indigo-500" />
                 <input
@@ -449,7 +538,8 @@ export default function ProfileForm() {
                   placeholder="Discord"
                   value={discord}
                   onChange={(e) => setDiscord(e.target.value)}
-                  className="ml-2 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2"
+                  className="ml-2 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                  disabled={!session}
                 />
               </div>
               <div className="flex items-center">
@@ -461,7 +551,8 @@ export default function ProfileForm() {
                   placeholder="Twitter"
                   value={twitter}
                   onChange={(e) => setTwitter(e.target.value)}
-                  className="ml-2 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2"
+                  className="ml-2 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                  disabled={!session}
                 />
               </div>
               <div className="flex items-center">
@@ -473,48 +564,73 @@ export default function ProfileForm() {
                   placeholder="LinkedIn"
                   value={linkedin}
                   onChange={(e) => setLinkedin(e.target.value)}
-                  className="ml-2 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2"
+                  className="ml-2 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                  disabled={!session}
                 />
               </div>
             </div>
           </div>
 
+          <hr class="w-full h-[1px] bg-v2-lily-5 border-none"></hr>
+
           <div>
-            <label htmlFor="resume" className="block text-sm font-medium text-gray-300">
-              Upload your resume/CV/portfolio
-            </label>
-            <div className="mt-1 flex items-center">
-              <label
-                htmlFor="file-upload"
-                className="relative cursor-pointer bg-gray-800 rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-              >
-                <span className="flex items-center py-2 px-4">
-                  <FaUpload className="mr-2" />
-                  {selectedFile ? selectedFile.name : 'Choose file'}
-                </span>
-                <input
-                  id="file-upload"
-                  name="file-upload"
-                  type="file"
-                  className="sr-only"
-                  onChange={handleFileChange}
-                />
-              </label>
-            </div>
-            <div className="mt-4 flex justify-center items-center">
-            <button
-                type="submit"
-                className="px-4 py-2 rounded-md bg-gray-700 text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-                Submit
-            </button>
-            </div>
+          <label htmlFor="resume" className="block text-sm font-medium text-gray-300 mb-1">
+          </label>
+          <div
+            {...getRootProps()}
+            role="presentation"
+            className={`p-6 rounded-xl border-2 border-v2-lily-5 bg-v2-lily-5 flex flex-col items-center cursor-pointer ${
+              isDragActive ? 'opacity-100' : 'opacity-30'
+            } ${!session && 'cursor-not-allowed'}`}
+          >
+            <input
+              {...getInputProps()}
+              disabled={!session} // Disable input when no session exists
+            />
+            {!selectedFile ? (
+              <>
+                <FaUpload className="text-4xl text-v2-lily mb-2" />
+                <p className="mt-3 text-center text-v2-lily/75 text-sm">
+                  {isDragActive ? (
+                    <span>Drop the file here...</span>
+                  ) : (
+                    <>
+                      <b className="font-semibold text-v2-lily">Click to upload</b> or drag and drop
+                      <br />
+                      PNG, JPG, PDF or DOCX (Max 1 file)
+                    </>
+                  )}
+                </p>
+              </>
+            ) : (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between bg-gray-800 px-4 py-2 rounded-md w-full">
+                  <span className="text-v2-lily truncate">{selectedFile.name}</span>
+                  <button
+                    type="button"
+                    onClick={removeFile}
+                    className="text-v2-lily hover:text-red-500 focus:outline-none"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
+          {fileError && <p className="text-red-500 text-sm mt-1">{fileError}</p>}
+        </div>
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-v2-primary px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2 text-[#475C26] text-xl font-bold border border-v2-primary/20  enabled:hover:bg-v2-primary/10 transition duration-300 flex-1 disabled:opacity-30 disabled:cursor-not-allowed"
+            // disabled={!selectedFile} || 
+            disabled={!session}
+          >
+            <span>Submit</span>
+          </button>
+        </div>
         </form>
       </div>
-      <footer className="text-center p-5 border-t border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
-        © 2024 JupRecruit Team.
-      </footer>
       <SpeedInsights />
       {showPopup && (
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

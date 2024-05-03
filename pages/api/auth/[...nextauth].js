@@ -15,7 +15,11 @@ export default NextAuth({
     },
     async redirect({ url, baseUrl }) {
       // Customize the redirect behavior after successful authentication
-      return baseUrl;
+      if (url.startsWith(baseUrl)) {
+        return url;
+      } else {
+        return baseUrl;
+      }
     },
     async session({ session, user, token }) {
       // Customize the session object if needed

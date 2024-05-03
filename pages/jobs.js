@@ -1,50 +1,14 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Inter } from 'next/font/google';
-import { FaDiscord, FaTwitter, FaLinkedin, FaUpload, FaTimes } from 'react-icons/fa';
+import { FaDiscord, FaUpload, FaTimes } from 'react-icons/fa';
 import { useDropzone } from 'react-dropzone';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn, signOut, getSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 const inter = Inter({ subsets: ['latin'] });
 
-const jobs = [
-  {
-    id: 1,
-    title: 'Web Working Group',
-    company: {
-      name: 'WWG',
-      description: 'Acme Inc. is a leading software development company.',
-      image: '/cat1.jpg',
-    },
-  },
-  {
-    id: 2,
-    title: 'Catdet Working Group',
-    company: {
-      name: 'CWG',
-      description: 'Beta Corp. is a startup focused on innovative solutions.',
-      image: '/cat2.jpg',
-    },
-  },
-  {
-    id: 3,
-    title: 'Reddit Working Group',
-    company: {
-      name: 'RWG',
-      description: 'Gamma LLC. is a renowned tech consulting firm.',
-      image: '/cat3.jpg',
-    },
-  },
-];
-
-const workingGroups = [
-  { title: 'JUP CWG', image: '/cat1.jpg', placeholder: 'Placeholder 1 text for first circle' },
-  { title: 'JUP CATDET WG', image: '/cat2.jpg', placeholder: 'Placeholder 2 text for second circle' },
-  { title: 'UPLINK WG', image: '/cat3.jpg', placeholder: 'Placeholder 3 text for third circle' },
-];
 
 export default function JobDetails() {
   const { data: session } = useSession();
@@ -56,6 +20,43 @@ export default function JobDetails() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileError, setFileError] = useState(null);
   const [errors, setErrors] = useState({});
+
+  const jobs = useMemo(() => [
+    {
+      id: 1,
+      title: 'Web Working Group',
+      company: {
+        name: 'WWG',
+        description: 'Acme Inc. is a leading software development company.',
+        image: '/cat1.jpg',
+      },
+    },
+    {
+      id: 2,
+      title: 'Catdet Working Group',
+      company: {
+        name: 'CWG',
+        description: 'Beta Corp. is a startup focused on innovative solutions.',
+        image: '/cat2.jpg',
+      },
+    },
+    {
+      id: 3,
+      title: 'Reddit Working Group',
+      company: {
+        name: 'RWG',
+        description: 'Gamma LLC. is a renowned tech consulting firm.',
+        image: '/cat3.jpg',
+      },
+    },
+  ], []);
+
+  
+  const workingGroups = useMemo(() => [
+    { title: 'JUP CWG', image: '/cat1.jpg', placeholder: 'Placeholder 1 text for first circle' },
+    { title: 'JUP CATDET WG', image: '/cat2.jpg', placeholder: 'Placeholder 2 text for second circle' },
+    { title: 'UPLINK WG', image: '/cat3.jpg', placeholder: 'Placeholder 3 text for third circle' },
+  ], []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -78,10 +79,10 @@ export default function JobDetails() {
     setSelectedFile(null);
   };
 
-  const openModal = (job) => {
+  const openModal = useCallback((job) => {
     setSelectedJob(job);
     setIsModalOpen(true);
-  };
+  }, []);
 
   const closeModal = () => {
     setSelectedJob(null);
@@ -212,9 +213,9 @@ export default function JobDetails() {
               onClick={() => openModal(job)}
             >
               <div className="flex items-center justify-center mb-4">
-                <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-blue-500">
-                  <Image src={job.company.image} alt={job.company.name} width={64} height={64} className="object-cover" />
-                </div>
+              <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-blue-500">
+                <Image src={job.company.image} alt={job.company.name} width={64} height={64} className="object-cover" layout="responsive" />
+              </div>
               </div>
               <h2 className="text-xl font-bold mb-2 text-v2-lily">{job.title}</h2>
               <p className="text-sm text-v2-lily/50 mb-4">{job.company.name}</p>
@@ -357,4 +358,14 @@ export default function JobDetails() {
     />
     </div>
   );
+}
+// Implement getServerSideProps to fetch session data
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      session,
+    },
+  };
 }

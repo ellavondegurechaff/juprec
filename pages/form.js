@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Inter } from 'next/font/google';
 import { FaDiscord, FaTwitter, FaLinkedin, FaUpload, FaTimes } from 'react-icons/fa';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { SessionProvider, useSession, signIn, signOut } from 'next-auth/react';
+import { getSession, useSession, signIn, signOut } from 'next-auth/react';
 import { useDropzone } from 'react-dropzone';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -302,7 +302,7 @@ export default function ProfileForm() {
 
   return (
     <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
-      <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
+      <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
       <Link href="/">
           <div className="w-12 h-12 rounded-full overflow-hidden">
             <Image src="/cattlogo.jpg" alt="Logo" width={48} height={48} className="object-cover" />
@@ -726,4 +726,14 @@ export default function ProfileForm() {
     />
     </div>
   );
+}
+// Implement getServerSideProps to fetch session data
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      session,
+    },
+  };
 }

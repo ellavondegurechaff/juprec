@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 const inter = Inter({ subsets: ["latin"] });
 import Image from 'next/image';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn, signOut, getSession } from 'next-auth/react';
 import { FaDiscord } from 'react-icons/fa';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -80,7 +80,7 @@ export default function Home() {
 
       <main className="px-5 sm:px-10 md:px-20 space-y-8 sm:space-y-12 md:space-y-24 py-10">
         <div className="text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
             JUPRecruit
           </h2>
           <div>
@@ -216,4 +216,15 @@ export default function Home() {
       <SpeedInsights />
     </div>
   );
+}
+
+// Implement getServerSideProps to fetch session data
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      session,
+    },
+  };
 }

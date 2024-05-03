@@ -3,13 +3,22 @@ import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import { FaDiscord, FaUpload, FaTimes } from 'react-icons/fa';
 import { useDropzone } from 'react-dropzone';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn, signOut, getSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const inter = Inter({ subsets: ['latin'] });
 
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      session
+    }
+  };
+}
 
 export default function JobDetails() {
   const { data: session } = useSession();

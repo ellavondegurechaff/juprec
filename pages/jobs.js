@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Inter } from 'next/font/google';
 import { FaDiscord, FaTwitter, FaLinkedin, FaUpload, FaTimes } from 'react-icons/fa';
 import { useDropzone } from 'react-dropzone';
@@ -129,19 +129,25 @@ export default function JobDetails() {
 
   const handleApply = async () => {
     if (!validateForm()) return;
+
+    // Display loading state
+    toast.info('Submitting your application...', {
+      position: 'top-center',
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "dark"
+    });
   
     try {
       // Upload file to Google Drive
       if (selectedFile) {
         await uploadFileToDrive(selectedFile);
       }
-  
-      // Perform application submission logic here
-      console.log('Applying for job:', selectedJob.title);
-      console.log('Name:', name);
-      console.log('Contact:', contact);
-      console.log('Message:', message);
-      console.log('Selected File:', selectedFile);
+
   
       // Display success message
       toast.success('Application submitted successfully!', {

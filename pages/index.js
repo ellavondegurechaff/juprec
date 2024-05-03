@@ -36,10 +36,12 @@ export default function Home() {
 
   return (
     <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
-    <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
-      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-2xl font-bold bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
-        Jupiter Talent Acquisition Group
-      </h1>
+    <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
+    <Link href="/">
+          <div className="w-12 h-12 rounded-full overflow-hidden">
+            <Image src="/cattlogo.jpg" alt="Logo" width={48} height={48} className="object-cover" />
+          </div>
+        </Link>
       <nav>
         {session ? (
           <div className="flex items-center space-x-4">
@@ -164,20 +166,20 @@ export default function Home() {
             {/* Job buttons with updated style and hover effect */}
             <button className="rounded-lg px-6 py-3 w-full md:w-96 flex flex-col items-center justify-center bg-white/[.20] hover:bg-white/[.30] transition font-bold"
                     style={{ color: 'rgb(217, 249, 157)' }}>
-              <span className="text-lg">Contract Specialist</span>
-              <span className="text-sm">Legal/Compliance, TAWG</span>
+              <span className="text-lg">Web Working Group</span>
+              <span className="text-sm">-</span>
             </button>
             
             <button className="rounded-lg px-6 py-3 w-full md:w-96 flex flex-col items-center justify-center bg-white/[.20] hover:bg-white/[.30] transition font-bold"
                     style={{ color: 'rgb(217, 249, 157)' }}>
-              <span className="text-lg">Job Title</span>
-              <span className="text-sm">Category, Working Group</span>
+              <span className="text-lg">Catdet Working Group</span>
+              <span className="text-sm">-</span>
             </button>
 
             <button className="rounded-lg px-6 py-3 w-full md:w-96 flex flex-col items-center justify-center bg-white/[.20] hover:bg-white/[.30] transition font-bold"
                     style={{ color: 'rgb(217, 249, 157)' }}>
-              <span className="text-lg">Job Title</span>
-              <span className="text-sm">Category, Working Group</span>
+              <span className="text-lg">Reddit Working Group</span>
+              <span className="text-sm">-</span>
             </button>
           </div>
         </div>

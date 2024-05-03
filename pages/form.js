@@ -4,6 +4,10 @@ import { FaDiscord, FaTwitter, FaLinkedin, FaUpload, FaTimes } from 'react-icons
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SessionProvider, useSession, signIn, signOut } from 'next-auth/react';
 import { useDropzone } from 'react-dropzone';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -195,6 +199,7 @@ export default function ProfileForm() {
       alert('Failed to upload file to Google Drive.');
     }
   };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -206,10 +211,22 @@ export default function ProfileForm() {
     if (!validateForm()) return;
   
     try {
-    // Upload file to Google Drive
-    if (selectedFile) {
-      await uploadFileToDrive(selectedFile);
-    }
+      // Display loading state
+      toast.info('Submitting your form...', {
+        position: 'top-center',
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: 'dark',
+      });
+  
+      // Upload file to Google Drive
+      if (selectedFile) {
+        await uploadFileToDrive(selectedFile);
+      }
   
       // Collect all the form data into an object
       const formData = {
@@ -238,22 +255,59 @@ export default function ProfileForm() {
       if (response.ok) {
         const result = await response.json();
         console.log('Form data successfully submitted:', result);
-        alert('Form submitted successfully!');
+        toast.dismiss();
+        toast.success('Form submitted successfully!', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
+
+        // Clear form fields
+        setName('');
+        setExpertise([]);
+        setExperience('');
+        setInterests([]);
+        setTalents('');
+        setLanguages([]);
+        setTimezone('');
+        setDescription('');
+        setDiscord('');
+        setTwitter('');
+        setLinkedin('');
+        setSelectedFile(null);
+
       } else {
         throw new Error('Form submission failed');
       }
     } catch (error) {
       console.error('Failed to submit form:', error);
-      alert('Failed to submit form.');
+      toast.dismiss();
+      toast.error('Failed to submit form. Please try again.', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      });
     }
   };
 
   return (
     <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
       <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
-        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-2xl font-bold bg-gradient-to-r from-[#00BEE0] to-[#C7F284] text-transparent bg-clip-text">
-          Jupiter Talent Acquisition Group
-        </h1>
+      <Link href="/">
+          <div className="w-12 h-12 rounded-full overflow-hidden">
+            <Image src="/cattlogo.jpg" alt="Logo" width={48} height={48} className="object-cover" />
+          </div>
+        </Link>
         <nav>
           {session ? (
             <div className="flex items-center space-x-4">
@@ -317,7 +371,6 @@ export default function ProfileForm() {
           Talent Profile Form
         </h2>
         
-        {/* <hr class="w-full h-[1px] bg-v2-lily-5 border-none"></hr> */}
         
         <form onSubmit={handleSubmit} className="space-y-8">
           <div>
@@ -597,7 +650,7 @@ export default function ProfileForm() {
                     <>
                       <b className="font-semibold text-v2-lily">Click to upload</b> or drag and drop
                       <br />
-                      PNG, JPG, PDF or DOCX (Max 1 file)
+                      PNG, JPG, PDF or DOCX (Max Size: 5MB)
                     </>
                   )}
                 </p>
@@ -660,6 +713,17 @@ export default function ProfileForm() {
     </div>
   </div>
       )}
+      <ToastContainer
+      position="top-center"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
     </div>
   );
 }

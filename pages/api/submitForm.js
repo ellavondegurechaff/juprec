@@ -1,51 +1,45 @@
 import { google } from 'googleapis';
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).send('Method Not Allowed');
-  }
+// Cached auth client
+let cachedAuth = null;
 
-  try {
-    const { data } = req.body;  // This should be the form data.
-    const auth = new google.auth.JWT(
+async function getGoogleAuth() {
+  if (!cachedAuth) {
+    cachedAuth = new google.auth.JWT(
       process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
       null,
       process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
       ['https://www.googleapis.com/auth/spreadsheets']
     );
+    await cachedAuth.authorize(); // Ensures the token is valid
+  }
+  return cachedAuth;
+}
 
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).send('Method Not Allowed');
+  }
+
+  // Validate input
+  const { data } = req.body;
+  if (!data || !data.name) { // Simplified validation for example
+    return res.status(400).json({ status: 'error', message: 'Missing required data fields' });
+  }
+
+  try {
+    const auth = await getGoogleAuth();
     const sheets = google.sheets({ version: 'v4', auth });
     const spreadsheetId = process.env.SPREADSHEET_ID;
-    const sheetTitle = 'Sheet1';  // Ensure this matches your actual sheet title
+    const sheetTitle = 'Sheet1';
 
-    // Fetch the first row to check if it is empty (indicative of missing headers)
-    const checkHeader = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range: `${sheetTitle}!A1:K1`  // Assuming you have up to K columns for headers
-    });
-
-    if (!checkHeader.data.values || checkHeader.data.values.length === 0) {
-      // Append headers if not present
-      const headers = [
-        'Name', 'Areas of Expertise', 'Experience', 'Areas of Interest', 'Talents/Hobbies',
-        'Languages', 'Timezone', 'Description', 'Discord', 'Twitter', 'LinkedIn'
-      ];
-      await sheets.spreadsheets.values.append({
-        spreadsheetId,
-        range: `${sheetTitle}!A1`,
-        valueInputOption: 'USER_ENTERED',
-        resource: { values: [headers] },
-      });
-    }
-
-    // Prepare data to append
     const values = [
       data.name,
-      data.expertise.join(', '),
+      data.expertise?.join(', '),
       data.experience,
-      data.interests.join(', '),
+      data.interests?.join(', '),
       data.talents,
-      data.languages.join(', '),
+      data.languages?.join(', '),
       data.timezone,
       data.description,
       data.discord,
@@ -53,17 +47,21 @@ export default async function handler(req, res) {
       data.linkedin
     ];
 
-    // Append actual data
-    await sheets.spreadsheets.values.append({
+    const result = await sheets.spreadsheets.values.append({
       spreadsheetId,
       range: `${sheetTitle}`,
       valueInputOption: 'USER_ENTERED',
       resource: { values: [values] },
     });
 
-    res.status(200).json({ status: 'success', message: "Data appended successfully!" });
+    res.status(200).json({ status: 'success', message: "Data appended successfully!", updatedRange: result.data.updates.updatedRange });
   } catch (error) {
     console.error('Error writing to Google Sheets:', error);
-    res.status(500).json({ status: 'error', error: error.toString() });
+    if (error.response?.status === 429) {
+      // Specific handling for rate limit errors
+      res.status(429).json({ status: 'error', message: 'Rate limit exceeded, please try again later' });
+    } else {
+      res.status(500).json({ status: 'error', error: error.toString() });
+    }
   }
-};
+}

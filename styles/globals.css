@@ -192,3 +192,46 @@ body {
 .enabled\:hover\:bg-v2-lily\/10:hover:enabled {
   background-color: rgba(232, 249, 255, 0.1);
 }
+
+/* Customize scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #1B2229;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #8e8e8e;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #00BEE0;
+}
+
+.text-v2-primary {
+  --tw-text-opacity: 1;
+  color: rgb(199 242 132 / var(--tw-text-opacity));
+}
+
+.Toastify__toast {
+  background-color: #1B2229;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.Toastify__toast--success {
+  border-left: 6px solid #C7F284;
+}
+
+.Toastify__toast-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+.Toastify__progress-bar {
+  background-color: #00BEE0;
+}

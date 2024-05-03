@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import { FaDiscord, FaTwitter, FaLinkedin, FaUpload, FaTimes } from 'react-icons/fa';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { getSession, useSession, signIn, signOut } from 'next-auth/react';
+import {useSession, signIn, signOut } from 'next-auth/react';
 import { useDropzone } from 'react-dropzone';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -142,7 +142,7 @@ export default function ProfileForm() {
     if (expertise.length === 0) newErrors.expertise = 'Please select at least one area of expertise';
     if (!experience) newErrors.experience = 'Experience is required';
     if (interests.length === 0) newErrors.interests = 'Please select at least one area of interest';
-    if (!talents) newErrors.talents = 'Talents / Hobbies are required';
+    if (!talents) newErrors.talents = 'Talents and Hobbies are required';
     if (languages.length === 0) newErrors.languages = 'Please select at least one language';
     if (!timezone) newErrors.timezone = 'Timezone is required';
     if (!description) newErrors.description = 'Description is required';
@@ -451,6 +451,7 @@ export default function ProfileForm() {
                   </option>
                 ))}
               </select>
+              {errors.experience && <p className="text-red-500 text-sm mt-1">{errors.experience}</p>}
             </div>
           </div>
 
@@ -491,7 +492,7 @@ export default function ProfileForm() {
 
           <div>
             <label htmlFor="talents" className="text-sm text-v2-lily/50 font-medium">
-              Talents / Hobbies
+              Talents and Hobbies
             </label>
             <div className="mt-1">
             <input
@@ -520,6 +521,7 @@ export default function ProfileForm() {
           >
             Select Languages
           </button>
+          {errors.languages && <p className="text-red-500 text-sm mt-1">{errors.languages}</p>}
               <div className="mt-2 flex flex-wrap gap-2">
                 {languages.map((option) => (
                   <span
@@ -561,6 +563,7 @@ export default function ProfileForm() {
               </option>
             ))}
           </select>
+          {errors.timezone && <p className="text-red-500 text-sm mt-1">{errors.timezone}</p>}
             </div>
           </div>
 
@@ -733,12 +736,12 @@ export default function ProfileForm() {
   );
 }
 // Implement getServerSideProps to fetch session data
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
+// export async function getServerSideProps(context) {
+//   const session = await getSession(context);
 
-  return {
-    props: {
-      session,
-    },
-  };
-}
+//   return {
+//     props: {
+//       session,
+//     },
+//   };
+// }

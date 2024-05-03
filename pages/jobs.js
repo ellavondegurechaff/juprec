@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import { FaDiscord, FaUpload, FaTimes } from 'react-icons/fa';
 import { useDropzone } from 'react-dropzone';
-import { useSession, signIn, signOut, getSession } from 'next-auth/react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ToastContainer, toast } from 'react-toastify';
@@ -365,12 +365,12 @@ export default function JobDetails() {
   );
 }
 // Implement getServerSideProps to fetch session data
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
+// export async function getServerSideProps(context) {
+//   const session = await getSession(context);
 
-  return {
-    props: {
-      session,
-    },
-  };
-}
+//   return {
+//     props: {
+//       session,
+//     },
+//   };
+// }

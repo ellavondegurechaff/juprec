@@ -364,13 +364,3 @@ export default function JobDetails() {
     </div>
   );
 }
-// Implement getServerSideProps to fetch session data
-// export async function getServerSideProps(context) {
-//   const session = await getSession(context);
-
-//   return {
-//     props: {
-//       session,
-//     },
-//   };
-// }

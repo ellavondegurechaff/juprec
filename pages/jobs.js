@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import { FaDiscord, FaUpload, FaTimes } from 'react-icons/fa';
 import { useDropzone } from 'react-dropzone';
-import { useSession, signIn, signOut, getSession  } from 'next-auth/react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ToastContainer, toast } from 'react-toastify';
@@ -363,22 +363,4 @@ export default function JobDetails() {
     />
     </div>
   );
-}
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-
-  if (!session) {
-    // Redirect user to login page if not logged in
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: { session }, // Pass session to the page component as a prop
-  };
 }

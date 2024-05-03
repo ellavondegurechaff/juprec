@@ -10,28 +10,20 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
+      // Perform any additional checks or store user data in your database
       return true;
     },
     async redirect({ url, baseUrl }) {
+      // Customize the redirect behavior after successful authentication
       return baseUrl;
     },
     async session({ session, user, token }) {
+      // Customize the session object if needed
       return session;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
+      // Customize the JWT token if needed
       return token;
     },
   },
-  cookies: {
-    sessionToken: {
-      name: "__Secure-next-auth.session-token",
-      options: {
-        httpOnly: true,
-        sameSite: 'Lax',
-        path: '/',
-        secure: true, // Enable this especially for production
-      },
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET, // Ensure you have a secret set for JWT encryption
 });

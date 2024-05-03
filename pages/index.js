@@ -103,16 +103,38 @@ export default function Home() {
             <h3 className="text-4xl md:text-5xl font-bold mb-9">Meowdy there! Yes, you pawsitively talented cat -</h3>
             <p className="text-lg md:text-xl mb-9">Join our Talent Community Today!</p>
             <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-4">
-                <Link href="/form" legacyBehavior>
-                  <a className="px-5 py-3 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition font-bold backdrop-blur-md" style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}>
-                    Create a Profile
-                  </a>
-                </Link>
-              <button className="px-5 py-3 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition font-bold backdrop-blur-md"
-                      style={{ color: 'rgb(217, 249, 157)' }}>
-                What's this?
-              </button>
-            </div>
+            <Link href="/form" legacyBehavior>
+              <a
+                className="rounded-xl text-[#C7F284] text-lg font-semibold px-6 py-3 flex flex-row items-center border-[#C7F28433] border-[1.5px] border-solid z-10 bg-[#C7F2840D] gap-3 hover:bg-[#C7F28426] transition"
+                style={{ color: 'rgb(217, 249, 157)', fontWeight: 'bold' }}
+              >
+                Create a Profile
+              </a>
+            </Link>
+            <button
+            className="rounded-xl text-[#C7F284] text-lg font-semibold px-6 py-3 flex flex-row items-center border-[#C7F28433] border-[1.5px] border-solid z-10 bg-[#C7F2840D] gap-3 hover:bg-[#C7F28426] transition animate-move animate-pulse"
+            style={{ boxShadow: '0px 1.536px 3.072px 0px rgba(16, 24, 40, 0.05)', color: 'rgb(217, 249, 157)' }}
+          >
+            What's this?
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="none"
+              viewBox="0 0 21 21"
+              color="#C7F284"
+              className="ml-2 transition duration-300 transform group-hover:translate-y-1"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2.56"
+                d="M10.145 4.225v13.333m0 0 5-5m-5 5-5-5"
+              ></path>
+            </svg>
+          </button>
+          </div>
           </div>
           <div className="mt-8 md:mt-0 md:ml-10 flex-1 max-w-xs">
             <div className="rounded-full overflow-hidden flex items-center justify-center w-full h-full">
@@ -156,12 +178,13 @@ export default function Home() {
               <h3 className="text-3xl md:text-5xl font-bold">What J.U.P. needs now - it might be you.</h3>
               <p className="text-center md:text-left text-md md:text-xl">J.U.P something opportunity something talent, skills. Explore the planet for opportunities.</p>
               <div className="flex justify-center md:justify-start">  {/* Ensures button alignment on mobile and desktop */}
-                <Link href="/jobs" legacyBehavior>
-                  <a className="px-5 py-3 rounded-2xl bg-white/[.20] hover:bg-white/[.30] transition duration-150 ease-in-out font-bold backdrop-blur-md"
-                    style={{ color: 'rgb(217, 249, 157)' }}>
-                    View All
-                  </a>
-                </Link>
+              <Link href="/jobs" legacyBehavior>
+              <a
+                className="rounded-xl text-[#C7F284] text-lg font-semibold px-6 py-3 flex flex-row items-center border-[#C7F28433] border-[1.5px] border-solid z-10 bg-[#C7F2840D] gap-3 hover:bg-[#C7F28426] transition"
+                style={{ color: 'rgb(217, 249, 157)' }}
+              >
+                View All </a>
+            </Link>
               </div>
             </div>
           </div>
@@ -169,19 +192,19 @@ export default function Home() {
 
           <div className="flex-1 max-w-xs mt-8 md:mt-0 md:ml-10 space-y-4">
             {/* Job buttons with updated style and hover effect */}
-            <button className="rounded-lg px-6 py-3 w-full md:w-96 flex flex-col items-center justify-center bg-white/[.20] hover:bg-white/[.30] transition font-bold"
+            <button className="rounded-xl text-[#C7F284] text-lg font-semibold px-6 py-3 w-full md:w-96 flex flex-row items-center justify-center border-[#C7F28433] border-[1.5px] border-solid z-10 bg-[#C7F2840D] gap-3 hover:bg-[#C7F28426] transition"
                     style={{ color: 'rgb(217, 249, 157)' }}>
               <span className="text-lg">Web Working Group</span>
               <span className="text-sm">-</span>
             </button>
             
-            <button className="rounded-lg px-6 py-3 w-full md:w-96 flex flex-col items-center justify-center bg-white/[.20] hover:bg-white/[.30] transition font-bold"
+            <button className="rounded-xl text-[#C7F284] text-lg font-semibold px-6 py-3 w-full md:w-96 flex flex-row items-center justify-center border-[#C7F28433] border-[1.5px] border-solid z-10 bg-[#C7F2840D] gap-3 hover:bg-[#C7F28426] transition"
                     style={{ color: 'rgb(217, 249, 157)' }}>
               <span className="text-lg">Catdet Working Group</span>
               <span className="text-sm">-</span>
             </button>
 
-            <button className="rounded-lg px-6 py-3 w-full md:w-96 flex flex-col items-center justify-center bg-white/[.20] hover:bg-white/[.30] transition font-bold"
+            <button className="rounded-xl text-[#C7F284] text-lg font-semibold px-6 py-3 w-full md:w-96 flex flex-row items-center justify-center border-[#C7F28433] border-[1.5px] border-solid z-10 bg-[#C7F2840D] gap-3 hover:bg-[#C7F28426] transition"
                     style={{ color: 'rgb(217, 249, 157)' }}>
               <span className="text-lg">Reddit Working Group</span>
               <span className="text-sm">-</span>

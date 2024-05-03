@@ -345,7 +345,7 @@ export default function JobDetails() {
             </button>
           </div>
           {!session && (
-            <p className="text-red-500 text-xs mt-4 text-center">Please log in to apply for this job.</p>
+            <p className="text-red-500 text-xs mt-4 text-center">Please log in to apply for this workgroup</p>
           )}
           </div>
         </div>

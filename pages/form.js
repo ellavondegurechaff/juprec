@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import { FaDiscord, FaTwitter, FaLinkedin, FaUpload, FaTimes } from 'react-icons/fa';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -303,6 +304,10 @@ export default function ProfileForm() {
   return (
     <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
       <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
+      <Head>
+        <title>JUPRecruit</title>
+        <link rel="icon" href="/catt.ico" />
+      </Head>
       <Link href="/">
           <div className="w-12 h-12 rounded-full overflow-hidden">
             <Image src="/cattlogo.jpg" alt="Logo" width={48} height={48} className="object-cover" />

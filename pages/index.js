@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 const inter = Inter({ subsets: ["latin"] });
@@ -36,6 +37,10 @@ export default function Home() {
 
   return (
     <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
+      <Head>
+        <title>JUPRecruit</title>
+        <link rel="icon" href="/catt.ico" />
+      </Head>
     <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
     <Link href="/">
           <div className="w-12 h-12 rounded-full overflow-hidden">

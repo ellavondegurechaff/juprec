@@ -640,14 +640,11 @@ export default function ProfileForm() {
           <div
             {...getRootProps()}
             role="presentation"
-            className={`p-6 rounded-xl border-2 border-v2-lily-5 bg-v2-lily-5 flex flex-col items-center cursor-pointer disabled:cursor-not-allowed ${
+            className={`p-6 rounded-xl border-2 border-v2-lily-5 bg-v2-lily-5 flex flex-col items-center ${
               isDragActive ? 'opacity-100' : 'opacity-30'
-            } ${!session && 'cursor-not-allowed'}`}
+            } ${!session ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           >
-            <input
-              {...getInputProps()}
-              disabled={!session} // Disable input when no session exists
-            />
+          <input {...getInputProps()} disabled={!session} />
             {!selectedFile ? (
               <>
                 <FaUpload className="text-4xl text-v2-lily mb-2" />

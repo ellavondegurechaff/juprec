@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import { FaDiscord, FaTwitter, FaLinkedin, FaUpload, FaTimes } from 'react-icons/fa';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import {useSession, signIn, signOut } from 'next-auth/react';
+import {useSession, signIn, signOut, getSession } from 'next-auth/react';
 import { useDropzone } from 'react-dropzone';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -734,4 +734,14 @@ export default function ProfileForm() {
     />
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      session
+    }
+  };
 }

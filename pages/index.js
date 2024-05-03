@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 const inter = Inter({ subsets: ["latin"] });
 import Image from 'next/image';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signIn, signOut, getSession } from 'next-auth/react';
 import { FaDiscord } from 'react-icons/fa';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -221,4 +221,14 @@ export default function Home() {
       <SpeedInsights />
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      session
+    }
+  };
 }

@@ -10,15 +10,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const inter = Inter({ subsets: ['latin'] });
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-
-  return {
-    props: {
-      session
-    }
-  };
-}
 
 export default function JobDetails() {
   const { data: session } = useSession();
@@ -372,4 +363,14 @@ export default function JobDetails() {
     />
     </div>
   );
+}
+// Implement getServerSideProps to fetch session data
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      session,
+    },
+  };
 }

@@ -72,16 +72,15 @@ export default function Home() {
       </nav>
     </header>
 
-      <div className="w-full h-64 relative overflow-hidden border-b border-gray-700">
-        <div
-          className="absolute top-0 left-0 w-full h-full"
-          style={{ 
-            backgroundImage: `url(/cat.jpg)`,
-            backgroundSize: 'cover',
-            transform: `translateY(${offsetY * 0.5}px) scale(1.2)`,
-          }}
-        />
-      </div>
+    <div className="w-full h-64 sm:h-96 relative overflow-hidden border-b border-gray-700">
+    <div 
+      className="absolute top-0 left-0 w-full h-full bg-cover bg-center sm:bg-contain"
+      style={{ 
+        backgroundImage: `url(/cat_banner-removebg.png)`,
+        transform: `translateY(${offsetY * 0.5}px)`,
+      }}
+    />
+  </div>
 
       <main className="px-5 sm:px-10 md:px-20 space-y-8 sm:space-y-12 md:space-y-24 py-10">
         <div className="text-center">

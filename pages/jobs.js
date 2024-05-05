@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
-import { FaDiscord, FaUpload, FaTimes } from 'react-icons/fa';
+import { FaDiscord, FaTwitter, FaUpload, FaTimes } from 'react-icons/fa';
 import { useDropzone } from 'react-dropzone';
 import { useSession, signIn, signOut, getSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -184,17 +184,18 @@ export default function JobDetails() {
           </div>
         </Link>
         <nav>
-          {session ? (
-            <div className="flex items-center space-x-4">
-              <span className="text-white">{session.user.name}</span>
-              <button
-                onClick={() => signOut()}
-                className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
+        {session ? (
+          <div className="flex items-center space-x-4">
+            <span className="text-white">{session.user.name}</span>
+            <button
+              onClick={() => signOut()}
+              className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <div className="flex space-x-4">
             <button
               onClick={() => signIn('discord')}
               className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center"
@@ -202,8 +203,16 @@ export default function JobDetails() {
               <FaDiscord className="mr-2" />
               Login with Discord
             </button>
-          )}
-        </nav>
+            <button
+              onClick={() => signIn('twitter')}
+              className="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 flex items-center"
+            >
+              <FaTwitter className="mr-2" />
+              Login with Twitter
+            </button>
+          </div>
+        )}
+      </nav>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
-import { FaDiscord, FaTwitter, FaLinkedin, FaUpload, FaTimes } from 'react-icons/fa';
+import { FaDiscord, FaTwitter, FaLinkedin, FaUpload, FaTimes, FaEnvelope, FaPlus } from 'react-icons/fa';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import {useSession, signIn, signOut, getSession } from 'next-auth/react';
 import { useDropzone } from 'react-dropzone';
@@ -20,7 +20,8 @@ const ExpertiseOptions = [
   'Machine Learning',
   'Blockchain',
   'Cloud Computing',
-  'Cybersecurity'
+  'Cybersecurity',
+  'Other'
 ];
 
 const ExperienceOptions = ['0-2 years', '2-5 years', '5-10 years', '10+ years'];
@@ -30,7 +31,8 @@ const InterestOptions = [
   'Backend Development',
   'Full Stack Development',
   'DevOps',
-  'Artificial Intelligence'
+  'Artificial Intelligence',
+  'Other'
 ];
 
 const LanguageOptions = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese'];
@@ -106,14 +108,40 @@ export default function ProfileForm() {
   const [timezone, setTimezone] = useState('');
   const [description, setDescription] = useState('');
   const [discord, setDiscord] = useState('');
+  const [email, setEmail] = useState('');
   const [twitter, setTwitter] = useState('');
   const [linkedin, setLinkedin] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [showExpertiseModal, setShowExpertiseModal] = useState(false);
   const [showInterestsModal, setShowInterestsModal] = useState(false);
   const [showLanguagesModal, setShowLanguagesModal] = useState(false);
+  const [previousWorkLinks, setPreviousWorkLinks] = useState(['']);
+  const [otherExpertise, setOtherExpertise] = useState('');
+  const [otherInterests, setOtherInterests] = useState('');
   const [errors, setErrors] = useState({});
   const [fileError, setFileError] = useState(null);
+
+  //Helpers
+  const addNewLinkField = () => {
+    if (Array.isArray(previousWorkLinks) && previousWorkLinks.length < 3) {
+      setPreviousWorkLinks([...previousWorkLinks, '']);
+    }
+  };
+  
+  const removeLinkField = (index) => {
+    if (Array.isArray(previousWorkLinks)) {
+      const updatedLinks = previousWorkLinks.filter((_, idx) => idx !== index);
+      setPreviousWorkLinks(updatedLinks);
+    }
+  };
+  
+  const handleLinkChange = (index, newLink) => {
+    if (Array.isArray(previousWorkLinks)) {
+      const updatedLinks = [...previousWorkLinks];
+      updatedLinks[index] = newLink;
+      setPreviousWorkLinks(updatedLinks);
+    }
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -152,16 +180,20 @@ export default function ProfileForm() {
   };
 
   const handleExpertiseChange = (selectedOption) => {
-    if (expertise.includes(selectedOption)) {
-      setExpertise(expertise.filter((option) => option !== selectedOption));
+    if (selectedOption === 'Other') {
+      setExpertise(expertise.includes('Other') ? expertise.filter((opt) => opt !== 'Other') : [...expertise, 'Other']);
+    } else if (expertise.includes(selectedOption)) {
+      setExpertise(expertise.filter((opt) => opt !== selectedOption));
     } else {
       setExpertise([...expertise, selectedOption]);
     }
   };
 
   const handleInterestsChange = (selectedOption) => {
-    if (interests.includes(selectedOption)) {
-      setInterests(interests.filter((option) => option !== selectedOption));
+    if (selectedOption === 'Other') {
+      setInterests(interests.includes('Other') ? interests.filter((opt) => opt !== 'Other') : [...interests, 'Other']);
+    } else if (interests.includes(selectedOption)) {
+      setInterests(interests.filter((opt) => opt !== selectedOption));
     } else {
       setInterests([...interests, selectedOption]);
     }
@@ -228,20 +260,26 @@ export default function ProfileForm() {
       if (selectedFile) {
         await uploadFileToDrive(selectedFile);
       }
+
+      // Retrieve the Discord username from the session data
+      const discordUsername = session?.user?.name || '';
   
       // Collect all the form data into an object
       const formData = {
         name,
-        expertise,
-        experience,
-        interests,
+        expertise: expertise.includes('Other') ? [...expertise.filter((e) => e !== 'Other'), otherExpertise] : expertise,
+        interests: interests.includes('Other') ? [...interests.filter((i) => i !== 'Other'), otherInterests] : interests,
+        experience, // Make sure this field is included and filled
         talents,
         languages,
         timezone,
         description,
+        email,
         discord,
         twitter,
         linkedin,
+        discordUsername, // New field
+        previousWorkLinks: previousWorkLinks.filter(link => link !== '') // Only non-empty links
       };
   
       // Use fetch to send the form data to your API route
@@ -270,6 +308,8 @@ export default function ProfileForm() {
 
         // Clear form fields
         setName('');
+        setOtherExpertise('');
+        setOtherInterests('');
         setExpertise([]);
         setExperience('');
         setInterests([]);
@@ -278,10 +318,11 @@ export default function ProfileForm() {
         setTimezone('');
         setDescription('');
         setDiscord('');
+        setEmail('');
         setTwitter('');
         setLinkedin('');
         setSelectedFile(null);
-
+        setPreviousWorkLinks(['']); // Reset to only one empty field
       } else {
         throw new Error('Form submission failed');
       }
@@ -314,26 +355,35 @@ export default function ProfileForm() {
           </div>
         </Link>
         <nav>
-          {session ? (
-            <div className="flex items-center space-x-4">
-              <span className="text-white">{session.user.name}</span>
-              <button
-                onClick={() => signOut()}
-                className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
+        {session ? (
+          <div className="flex items-center space-x-4">
+            <span className="text-white">{session.user.name}</span>
             <button
-            onClick={() => signIn('discord')}
-            className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center"
+              onClick={() => signOut()}
+              className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
-            <FaDiscord className="mr-2" />
-            Login with Discord
+              Logout
             </button>
-          )}
-        </nav>
+          </div>
+        ) : (
+          <div className="flex space-x-4">
+            <button
+              onClick={() => signIn('discord')}
+              className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center"
+            >
+              <FaDiscord className="mr-2" />
+              Login with Discord
+            </button>
+            <button
+              onClick={() => signIn('twitter')}
+              className="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 flex items-center"
+            >
+              <FaTwitter className="mr-2" />
+              Login with Twitter
+            </button>
+          </div>
+        )}
+      </nav>
       </header>
       {!session && (
         <div className="max-w-[600px] mx-auto mt-[96px] p-6 rounded-xl px-4 py-2.5 flex items-center justify-center space-x-2 text-jupiter-red text-sm font-semibold border border-warning/20 bg-warning/5 disabled:opacity-40 enabled:hover:bg-v2-primary/10 transition duration-300">
@@ -396,10 +446,8 @@ export default function ProfileForm() {
             </div>
           </div>
 
-        <div>
-          <label htmlFor="expertise" className="text-sm text-v2-lily/50 font-medium">
-            Areas of Expertise
-          </label>
+          <div>
+          <label htmlFor="expertise" className="text-sm text-v2-lily/50 font-medium">Areas of Expertise</label>
           <div className="mt-1">
           <button
             type="button"
@@ -409,7 +457,7 @@ export default function ProfileForm() {
           >
             Select Expertise
           </button>
-          {errors.expertise && <p className="text-red-500 text-sm mt-1">{errors.expertise}</p>}
+            {errors.expertise && <p className="text-red-500 text-sm mt-1">{errors.expertise}</p>}
             <div className="mt-2 flex flex-wrap gap-2">
               {expertise.map((option) => (
                 <span
@@ -419,7 +467,7 @@ export default function ProfileForm() {
                   {option}
                   <button
                     type="button"
-                    className="flex-shrink-0 ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:outline-none focus:bg-indigo-500 focus:text-white"
+                    className="flex-shrink-0 ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500"
                     onClick={() => handleExpertiseChange(option)}
                   >
                     <span className="sr-only">Remove {option}</span>
@@ -429,6 +477,19 @@ export default function ProfileForm() {
               ))}
             </div>
           </div>
+          {expertise.includes('Other') && (
+            <div className="mt-2">
+            <label htmlFor="other-expertise" className="text-sm font-medium text-gray-300">Other Expertise</label>
+            <input
+              type="text"
+              id="other-expertise"
+              value={otherExpertise}
+              onChange={(e) => setOtherExpertise(e.target.value)}
+              placeholder="Enter your expertise"
+              className="mt-1 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          )}
         </div>
 
           <div>
@@ -456,39 +517,50 @@ export default function ProfileForm() {
           </div>
 
           <div>
-            <label htmlFor="interests" className="text-sm text-v2-lily/50 font-medium0">
-              Areas of Interest
-            </label>
-            <div className="mt-1">
-            <button
-                type="button"
-                className="px-3 py-1.5 rounded-md flex items-center justify-center space-x-1 text-v2-lily text-xs font-semibold border border-v2-lily/20 bg-v2-lily/5 disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:bg-v2-lily/10 transition duration-300"
-                onClick={() => setShowInterestsModal(true)}
-                disabled={!session}
-              >
-                Select Interests
-              </button>
-              {errors.interests && <p className="text-red-500 text-sm mt-1">{errors.interests}</p>}
-              <div className="mt-2 flex flex-wrap gap-2">
-                {interests.map((option) => (
-                  <span
-                    key={option}
-                    className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
+          <label htmlFor="interests" className="text-sm text-v2-lily/50 font-medium0">Areas of Interest</label>
+          <div className="mt-1">
+          <button
+            type="button"
+            className="px-3 py-1.5 rounded-md flex items-center justify-center space-x-1 text-v2-lily text-xs font-semibold border border-v2-lily/20 bg-v2-lily/5 disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:bg-v2-lily/10 transition duration-300"
+            onClick={() => setShowInterestsModal(true)}
+            disabled={!session}
+          >
+            Select Interests
+          </button>
+            {errors.interests && <p className="text-red-500 text-sm mt-1">{errors.interests}</p>}
+            <div className="mt-2 flex flex-wrap gap-2">
+              {interests.map((option) => (
+                <span
+                  key={option}
+                  className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
+                >
+                  {option}
+                  <button
+                    type="button"
+                    className="flex-shrink-0 ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500"
+                    onClick={() => handleInterestsChange(option)}
                   >
-                    {option}
-                    <button
-                      type="button"
-                      className="flex-shrink-0 ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:outline-none focus:bg-indigo-500 focus:text-white"
-                      onClick={() => handleInterestsChange(option)}
-                    >
-                      <span className="sr-only">Remove {option}</span>
-                      <FaTimes className="h-2 w-2" />
-                    </button>
-                  </span>
-                ))}
-              </div>
+                    <span className="sr-only">Remove {option}</span>
+                    <FaTimes className="h-2 w-2" />
+                  </button>
+                </span>
+              ))}
             </div>
           </div>
+          {interests.includes('Other') && (
+            <div className="mt-2">
+            <label htmlFor="other-interests" className="text-sm font-medium text-gray-300">Other Interests</label>
+            <input
+              type="text"
+              id="other-interests"
+              value={otherInterests}
+              onChange={(e) => setOtherInterests(e.target.value)}
+              placeholder="Enter your interests"
+              className="mt-1 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          )}
+        </div>
 
           <div>
             <label htmlFor="talents" className="text-sm text-v2-lily/50 font-medium">
@@ -591,30 +663,30 @@ export default function ProfileForm() {
             </label>
             <div className="mt-1 grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="flex items-center">
-                <FaDiscord className="text-xl text-indigo-500" />
-                <input
-                  type="text"
-                  name="discord"
-                  id="discord"
-                  placeholder="Discord"
-                  value={discord}
-                  onChange={(e) => setDiscord(e.target.value)}
-                  className="ml-2 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
-                  disabled={!session}
-                />
-              </div>
+              <FaEnvelope className="text-xl text-indigo-500" />
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="ml-2 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                disabled={!session}
+              />
+            </div>
               <div className="flex items-center">
-                <FaTwitter className="text-xl text-blue-500" />
-                <input
-                  type="text"
-                  name="twitter"
-                  id="twitter"
-                  placeholder="Twitter"
-                  value={twitter}
-                  onChange={(e) => setTwitter(e.target.value)}
-                  className="ml-2 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
-                  disabled={!session}
-                />
+              <FaTwitter className="text-xl text-blue-500" />
+              <input
+                type="text"
+                name="twitter"
+                id="twitter"
+                placeholder={session?.user?.image?.includes('twimg.com') ? session?.user?.name : 'Twitter'}
+                value={session?.user?.image?.includes('twimg.com') ? session?.user?.name : twitter}
+                onChange={(e) => setTwitter(e.target.value)}
+                className="ml-2 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                disabled={session?.user?.image?.includes('twimg.com') || !session}
+              />
               </div>
               <div className="flex items-center">
                 <FaLinkedin className="text-xl text-blue-600" />
@@ -629,6 +701,46 @@ export default function ProfileForm() {
                   disabled={!session}
                 />
               </div>
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="previousWorkLinks" className="block text-sm font-medium text-gray-300">
+              Links to Previous Work (optional)
+            </label>
+            <div className="mt-1 space-y-4">
+              {Array.isArray(previousWorkLinks) && previousWorkLinks.map((link, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <input
+                    type="url"
+                    placeholder={`Link ${index + 1}`}
+                    value={link}
+                    onChange={(e) => handleLinkChange(index, e.target.value)}
+                    className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+                    disabled={!session}
+                  />
+                  {index >= 1 && (
+                    <button
+                      type="button"
+                      className="p-2 bg-red-600 rounded-full text-white hover:bg-red-700"
+                      onClick={() => removeLinkField(index)}
+                      disabled={!session}
+                    >
+                      <FaTimes />
+                    </button>
+                  )}
+                  {index === previousWorkLinks.length - 1 && previousWorkLinks.length < 3 && (
+                    <button
+                    type="button"
+                    className="p-2 bg-indigo-600 rounded-full text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-indigo-700"
+                    onClick={addNewLinkField}
+                    disabled={!session}
+                  >
+                    <FaPlus />
+                  </button>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 

@@ -5,7 +5,7 @@ import Link from 'next/link';
 const inter = Inter({ subsets: ["latin"] });
 import Image from 'next/image';
 import { useSession, signIn, signOut, getSession } from 'next-auth/react';
-import { FaDiscord } from 'react-icons/fa';
+import { FaDiscord, FaTwitter } from 'react-icons/fa';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -43,44 +43,61 @@ export default function Home() {
       </Head>
     <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
     <Link href="/">
-          <div className="w-12 h-12 rounded-full overflow-hidden">
-            <Image src="/cattlogo.jpg" alt="Logo" width={48} height={48} className="object-cover" />
+          <div className="w-14 h-14 rounded-full overflow-hidden">
+            <Image src="/catt_logo.png" alt="Logo" width={64} height={64} className="object-cover" />
           </div>
         </Link>
-      <nav>
-        {session ? (
-          <div className="flex items-center space-x-4">
-            <span className="text-white">{session.user.name}</span>
-            <button
-              onClick={() => signOut()}
-              className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-300"
-            >
-              Sign Out
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => signIn('discord')}
-            className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300"
-          >
-            <div className="flex items-center">
-              <FaDiscord className="mr-2" />
-              <span>Login with Discord</span>
+        <nav>
+          {session ? (
+            <div className="flex items-center space-x-4">
+              <span className="text-white">{session.user.name}</span>
+              <button
+                onClick={() => signOut()}
+                className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-300"
+              >
+                Sign Out
+              </button>
             </div>
-          </button>
-        )}
-      </nav>
-    </header>
+          ) : (
+            <div className="flex space-x-4">
+              {/* Discord login button */}
+              <button
+                onClick={() => signIn('discord')}
+                className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300"
+              >
+                <div className="flex items-center">
+                  <FaDiscord className="mr-2" />
+                  <span>Login with Discord</span>
+                </div>
+              </button>
 
-    <div className="w-full h-64 sm:h-96 relative overflow-hidden border-b border-gray-700">
-    <div 
-      className="absolute top-0 left-0 w-full h-full bg-cover bg-center sm:bg-contain"
-      style={{ 
-        backgroundImage: `url(/cat_banner-removebg.png)`,
-        transform: `translateY(${offsetY * 0.5}px)`,
-      }}
-    />
-  </div>
+              {/* Twitter login button */}
+              <button
+                onClick={() => signIn('twitter')}
+                className="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition duration-300"
+              >
+                <div className="flex items-center">
+                  <FaTwitter className="mr-2" />
+                  <span>Login with Twitter</span>
+                </div>
+              </button>
+            </div>
+          )}
+        </nav>
+      </header>
+
+<div className="w-full h-64 sm:h-96 relative overflow-hidden border-b border-gray-700">
+  <div 
+    className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
+    style={{ 
+      backgroundImage: `url(/cat_banner.png)`,
+      backgroundSize: 'cover', // Ensure the image covers the entire area
+      backgroundRepeat: 'no-repeat', // Prevent the image from repeating
+      backgroundPosition: 'center', // Center the image within the header
+      transform: `translateY(${offsetY * 0.5}px)`, // Optional: if you need to adjust vertically
+    }}
+  />
+</div>
 
       <main className="px-5 sm:px-10 md:px-20 space-y-8 sm:space-y-12 md:space-y-24 py-10">
         <div className="text-center">

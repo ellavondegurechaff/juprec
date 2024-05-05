@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   }
 
   // Validate input
-  const { data } = req.body;
+  const { data, session } = req.body; // Extract both data and session from the request body
   if (!data || !data.name) {
     return res.status(400).json({ status: 'error', message: 'Missing required data fields' });
   }

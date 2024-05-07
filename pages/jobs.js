@@ -367,7 +367,7 @@ export default function JobDetails() {
                   onChange={(e) => setMessage(e.target.value)}
                   className="mt-1 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
                   disabled={!session}
-                  placeholder={`Abilities, Skills, Responsibilities..`}
+                  placeholder={`You can write an introduction or summary here! Let the team know more about you.`}
                 />
                 {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
               </div>

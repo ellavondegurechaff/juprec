@@ -233,7 +233,7 @@ export default function Home() {
         <section className="my-16 mx-5">
           <div className="flex flex-col md:flex-row items-center justify-center">
             <div className="max-w-full w-full text-center"> {/* Changed to always center text */}
-              <h3 className="text-2xl md:text-4xl font-bold mb-6">The Process</h3>
+              {/* <h3 className="text-2xl md:text-4xl font-bold mb-6">The Process</h3> */}
               <div className="mt-4">
                 {/* Responsive Image Container */}
                 <div className="relative w-full" style={{ height: 'auto' }}> {/* Removing fixed aspect ratio */}

@@ -17,9 +17,12 @@ SwiperCore.use([Autoplay, Navigation]);
 export default function Home() {
   const { data: session } = useSession();
   const workingGroups = [
-    { title: 'JUP CWG', image: '/cat1.jpg', placeholder: 'Placeholder 1 text for first circle' },
-    { title: 'JUP CATDET WG', image: '/cat2.jpg', placeholder: 'Placeholder 2 text for second circle' },
-    { title: 'UPLINK WG', image: '/cat3.jpg', placeholder: 'Placeholder 3 text for third circle' },
+    { title: 'CORE WG', image: '/cat1.jpg', placeholder: 'Placeholder 1 text for first circle' },
+    { title: 'UPLINK WG', image: '/cat2.jpg', placeholder: 'Placeholder 2 text for second circle' },
+    { title: 'WEN WG', image: '/cat3.jpg', placeholder: 'Placeholder 3 text for third circle' },
+    { title: 'CATDET WG', image: '/cat3.jpg', placeholder: 'Placeholder 4 text for third circle' },
+    { title: 'REDDIT WG', image: '/cat3.jpg', placeholder: 'Placeholder 5 text for third circle' },
+    { title: 'WEB WG', image: '/cat3.jpg', placeholder: 'Placeholder 6 text for third circle' },
   ];
 
   const [offsetY, setOffsetY] = useState(0);
@@ -39,58 +42,55 @@ export default function Home() {
     <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
       <Head>
         <title>JUPRecruit</title>
-        <link rel="icon" href="/catt.ico" />
+        <link rel="icon" href="/catt_logo.ico" />
       </Head>
-    <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
+      <header className="flex justify-between items-center p-1 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
     <Link href="/">
-          <div className="w-14 h-14 rounded-full overflow-hidden">
-            <Image src="/catt_logo.png" alt="Logo" width={64} height={64} className="object-cover" />
-          </div>
-        </Link>
-        <nav>
-          {session ? (
-            <div className="flex items-center space-x-4">
-              <span className="text-white">{session.user.name}</span>
-              <button
-                onClick={() => signOut()}
-                className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-300"
-              >
-                Sign Out
-              </button>
+      <div className="w-14 h-14 rounded-full overflow-hidden ml-12" style={{ position: 'relative', top: '8px' }}>
+        <Image src="/catt_logo.png" alt="Logo" width={40} height={40} className="object-cover" />
+      </div>
+    </Link>
+    <nav>
+      {session ? (
+        <div className="flex items-center space-x-4"> {/* This container is for logged in state */}
+          <span className="text-white">{session.user.name}</span>
+          <button
+            onClick={() => signOut()}
+            className="px-3 py-1 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-300"
+          >
+            Sign Out
+          </button>
+        </div>
+      ) : (
+        <div className="flex items-center space-x-4"> {/* This container is for logged out state */}
+          <button
+            onClick={() => signIn('discord')}
+            className="px-3 py-1 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300"
+          >
+            <div className="flex items-center">
+              <FaDiscord className="mr-2" />
+              <span>Login with Discord</span>
             </div>
-          ) : (
-            <div className="flex space-x-4">
-              {/* Discord login button */}
-              <button
-                onClick={() => signIn('discord')}
-                className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300"
-              >
-                <div className="flex items-center">
-                  <FaDiscord className="mr-2" />
-                  <span>Login with Discord</span>
-                </div>
-              </button>
-
-              {/* Twitter login button */}
-              <button
-                onClick={() => signIn('twitter')}
-                className="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition duration-300"
-              >
-                <div className="flex items-center">
-                  <FaTwitter className="mr-2" />
-                  <span>Login with Twitter</span>
-                </div>
-              </button>
+          </button>
+          <button
+            onClick={() => signIn('twitter')}
+            className="px-3 py-1 rounded-md bg-blue-400 text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition duration-300"
+          >
+            <div className="flex items-center">
+              <FaTwitter className="mr-2" />
+              <span>Login with Twitter</span>
             </div>
-          )}
-        </nav>
-      </header>
+          </button>
+        </div>
+      )}
+    </nav>
+  </header>
 
 <div className="w-full h-64 sm:h-96 relative overflow-hidden border-b border-gray-700">
   <div 
     className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
     style={{ 
-      backgroundImage: `url(/cat_banner.png)`,
+      backgroundImage: `url(/catt_banner.png)`,
       backgroundSize: 'cover', // Ensure the image covers the entire area
       backgroundRepeat: 'no-repeat', // Prevent the image from repeating
       backgroundPosition: 'center', // Center the image within the header
@@ -228,20 +228,25 @@ export default function Home() {
           </div>
         </div>
 
+
         {/* The Process Section */}
         <section className="my-16 mx-5">
-          <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0">
-            <div className="max-w-lg text-center md:text-left">
-              <h3 className="text-4xl font-bold">The Process</h3>
-              <p>Follow these steps to get started on your journey.</p>
-              <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4 mt-4">
-                <div className="text-lg font-bold">Apply</div>
-                <div className="h-1 flex-grow bg-gray-300"></div>
-                <div className="text-lg font-bold">Interview</div>
-                <div className="h-1 flex-grow bg-gray-300"></div>
-                <div className="text-lg font-bold">Hire</div>
-                <div className="h-1 flex-grow bg-gray-300"></div>
-                <div className="text-lg font-bold">Grow</div>
+          <div className="flex flex-col md:flex-row items-center justify-center">
+            <div className="max-w-full w-full text-center"> {/* Changed to always center text */}
+              <h3 className="text-2xl md:text-4xl font-bold mb-6">The Process</h3>
+              <div className="mt-4">
+                {/* Responsive Image Container */}
+                <div className="relative w-full" style={{ height: 'auto' }}> {/* Removing fixed aspect ratio */}
+                  <Image
+                    src="/process.png" // Update the path as necessary
+                    alt="Detailed Process Image"
+                    layout="responsive" // This will make the image responsive to the container's width
+                    width={5000} // Set the original width of the image
+                    height={1250} // Set the original height of the image
+                    objectFit="contain" // Ensures the image scales down if necessary to fit within the container without being cropped
+                    priority // This will load the image immediately on page load
+                  />
+                </div>
               </div>
             </div>
           </div>

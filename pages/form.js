@@ -13,14 +13,21 @@ import 'react-toastify/dist/ReactToastify.css';
 const inter = Inter({ subsets: ['latin'] });
 
 const ExpertiseOptions = [
-  'Web Development',
-  'Mobile Development',
-  'UI/UX Design',
-  'Data Science',
-  'Machine Learning',
-  'Blockchain',
-  'Cloud Computing',
-  'Cybersecurity',
+  'Business Development',
+  'Business Intelligence & Data Science',
+  'AI & Machine Learning',
+  'IT & Cybersecurity',
+  'Accounting & Finance',
+  'Web2/Web3 Development',
+  'Administration & Human Resources',
+  'Graphic Design & Media Productions',
+  'Sales & Marketing',
+  'Communications & PR',
+  'Customer Service',
+  'Logitics & Operations',
+  'Legal & Compliance',
+  'Medical, Health & Safety',
+  'Project & Product Management',
   'Other'
 ];
 
@@ -35,7 +42,7 @@ const InterestOptions = [
   'Other'
 ];
 
-const LanguageOptions = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese'];
+const LanguageOptions = ['English', 'Chinese', 'Russian', 'Japanese', 'Chinese', 'Russian', 'Indonesian', 'Turkish', 'Persian', 'Vietnamese', 'French', 'Spanish', 'Italian', 'Portuguese', 'Indian', 'German', 'Filipino', 'Arabic'];
 
 const TimezoneOptions = [
   'UTC-12',
@@ -262,26 +269,27 @@ export default function ProfileForm() {
       }
 
       // Retrieve the Discord username from the session data
-      const discordUsername = session?.user?.name || '';
+      const username = session?.user?.name || '';
   
       // Collect all the form data into an object
       const formData = {
         name,
         expertise: expertise.includes('Other') ? [...expertise.filter((e) => e !== 'Other'), otherExpertise] : expertise,
         interests: interests.includes('Other') ? [...interests.filter((i) => i !== 'Other'), otherInterests] : interests,
-        experience, // Make sure this field is included and filled
+        experience,
         talents,
         languages,
         timezone,
         description,
         email,
-        discord,
         twitter,
         linkedin,
-        discordUsername, // New field
-        previousWorkLinks: previousWorkLinks.filter(link => link !== '') // Only non-empty links
+        previousWorkLinks: previousWorkLinks.filter(link => link !== ''),
+        loggedInDiscord: session?.user?.image?.includes('discord') ? 'true' : 'false',
+        loggedInTwitter: session?.user?.image?.includes('twimg.com') ? 'true' : 'false',
+        loggedUsername: username,
       };
-  
+    
       // Use fetch to send the form data to your API route
       const response = await fetch('/api/submitForm', {
         method: 'POST',
@@ -344,50 +352,55 @@ export default function ProfileForm() {
 
   return (
     <div style={{ backgroundColor: 'rgb(19, 24, 29)' }} className={`min-h-screen text-white ${inter.className}`}>
-      <header className="flex justify-between items-center p-4 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
       <Head>
         <title>JUPRecruit</title>
-        <link rel="icon" href="/catt.ico" />
+        <link rel="icon" href="/catt_logo.ico" />
       </Head>
-      <Link href="/">
-          <div className="w-12 h-12 rounded-full overflow-hidden">
-            <Image src="/cattlogo.jpg" alt="Logo" width={48} height={48} className="object-cover" />
-          </div>
-        </Link>
-        <nav>
-        {session ? (
-          <div className="flex items-center space-x-4">
-            <span className="text-white">{session.user.name}</span>
-            <button
-              onClick={() => signOut()}
-              className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              Logout
-            </button>
-          </div>
-        ) : (
-          <div className="flex space-x-4">
-            <button
-              onClick={() => signIn('discord')}
-              className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center"
-            >
+      <header className="flex justify-between items-center p-1 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
+    <Link href="/">
+      <div className="w-14 h-14 rounded-full overflow-hidden ml-12" style={{ position: 'relative', top: '8px' }}>
+        <Image src="/catt_logo.png" alt="Logo" width={40} height={40} className="object-cover" />
+      </div>
+    </Link>
+    <nav>
+      {session ? (
+        <div className="flex items-center space-x-4"> {/* This container is for logged in state */}
+          <span className="text-white">{session.user.name}</span>
+          <button
+            onClick={() => signOut()}
+            className="px-3 py-1 rounded-md bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-300"
+          >
+            Sign Out
+          </button>
+        </div>
+      ) : (
+        <div className="flex items-center space-x-4"> {/* This container is for logged out state */}
+          <button
+            onClick={() => signIn('discord')}
+            className="px-3 py-1 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300"
+          >
+            <div className="flex items-center">
               <FaDiscord className="mr-2" />
-              Login with Discord
-            </button>
-            <button
-              onClick={() => signIn('twitter')}
-              className="px-4 py-2 rounded-md bg-blue-400 text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 flex items-center"
-            >
+              <span>Login with Discord</span>
+            </div>
+          </button>
+          <button
+            onClick={() => signIn('twitter')}
+            className="px-3 py-1 rounded-md bg-blue-400 text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition duration-300"
+          >
+            <div className="flex items-center">
               <FaTwitter className="mr-2" />
-              Login with Twitter
-            </button>
-          </div>
-        )}
-      </nav>
-      </header>
+              <span>Login with Twitter</span>
+            </div>
+          </button>
+        </div>
+      )}
+    </nav>
+  </header>
+
       {!session && (
         <div className="max-w-[600px] mx-auto mt-[96px] p-6 rounded-xl px-4 py-2.5 flex items-center justify-center space-x-2 text-jupiter-red text-sm font-semibold border border-warning/20 bg-warning/5 disabled:opacity-40 enabled:hover:bg-v2-primary/10 transition duration-300">
-          You are required to link your Discord to fill up the form.
+          You are required to login to fill up the forms.
         </div>
       )}
 

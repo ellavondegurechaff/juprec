@@ -1,8 +1,9 @@
+// ./auth/[...nextauth].js
 import NextAuth from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 import TwitterProvider from 'next-auth/providers/twitter';
 
-export default NextAuth({
+export const authOptions = {
   providers: [
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID,
@@ -11,8 +12,8 @@ export default NextAuth({
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID,
       clientSecret: process.env.TWITTER_CLIENT_SECRET,
-      version: "2.0"
-    })
+      version: "2.0",
+    }),
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
@@ -36,4 +37,6 @@ export default NextAuth({
       return token;
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

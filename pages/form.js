@@ -127,6 +127,8 @@ export default function ProfileForm() {
   const [otherInterests, setOtherInterests] = useState('');
   const [errors, setErrors] = useState({});
   const [fileError, setFileError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
 
   //Helpers
   const addNewLinkField = () => {
@@ -251,6 +253,7 @@ export default function ProfileForm() {
     if (!validateForm()) return;
   
     try {
+      setSubmitting(true); 
       // Display loading state
       toast.info('Submitting your form...', {
         position: 'top-center',
@@ -347,6 +350,8 @@ export default function ProfileForm() {
         progress: undefined,
         theme: 'dark',
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -803,14 +808,13 @@ export default function ProfileForm() {
           {fileError && <p className="text-red-500 text-sm mt-1">{fileError}</p>}
         </div>
         <div className="flex justify-center">
-          <button
-            type="submit"
-            className="bg-v2-primary px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2 text-[#475C26] text-xl font-bold border border-v2-primary/20  enabled:hover:bg-v2-primary/10 transition duration-300 flex-1 disabled:opacity-30 disabled:cursor-not-allowed"
-            // disabled={!selectedFile} || 
-            disabled={!session}
-          >
-            <span>Submit</span>
-          </button>
+        <button
+          type="submit"
+          className="bg-v2-primary px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2 text-[#475C26] text-xl font-bold border border-v2-primary/20 enabled:hover:bg-v2-primary/10 transition duration-300 flex-1 disabled:opacity-30 disabled:cursor-not-allowed"
+          disabled={!session || submitting} // Disable the button when submitting is true
+        >
+          <span>Submit</span>
+        </button>
         </div>
         </form>
       </div>

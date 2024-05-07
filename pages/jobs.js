@@ -191,7 +191,8 @@ export default function JobDetails() {
     });
   
     try {
-    // Upload file to Google Drive with position name
+      setSubmitting(true); 
+
     if (selectedFile && selectedJob.title) {
       await uploadFileToDrive(selectedFile, selectedJob.title);
     }
@@ -234,6 +235,8 @@ export default function JobDetails() {
     } catch (error) {
       console.error('Failed to apply for job:', error);
       alert('Failed to apply for job. Please try again.');
+    } finally {
+      setSubmitting(false); // Set submitting back to false
     }
   };
 
@@ -420,13 +423,13 @@ export default function JobDetails() {
               </div>
             </div>
             <div className="mt-8 flex justify-center">
-              <button
-                onClick={handleApply}
-                disabled={!session}
-                className="bg-v2-primary px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2 text-[#475C26] text-xl font-bold border border-v2-primary/20 enabled:hover:bg-v2-primary/10 transition duration-300 flex-1 disabled:opacity-30 disabled:cursor-not-allowed"
-              >
-                <span>Apply Now</span>
-              </button>
+            <button
+              onClick={handleApply}
+              disabled={!session || submitting} // Disable the button when submitting is true
+              className="bg-v2-primary px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2 text-[#475C26] text-xl font-bold border border-v2-primary/20 enabled:hover:bg-v2-primary/10 transition duration-300 flex-1 disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <span>Apply Now</span>
+            </button>
             </div>
             {!session && (
               <p className="text-red-500 text-xs mt-4 text-center">Please log in to apply for this workgroup</p>

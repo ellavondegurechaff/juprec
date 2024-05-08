@@ -21,6 +21,9 @@ export default function JobDetails() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileError, setFileError] = useState(null);
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+
 
   const jobs = useMemo(() => [
     {
@@ -247,12 +250,17 @@ export default function JobDetails() {
         <link rel="icon" href="/catt_logo.ico" />
       </Head>
       <header className="flex justify-between items-center p-1 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
-    <Link href="/">
-      <div className="w-14 h-14 rounded-full overflow-hidden ml-12" style={{ position: 'relative', top: '8px' }}>
-        <Image src="/catt_logo.png" alt="Logo" width={40} height={40} className="object-cover" />
+      <div className="flex items-center">
+        <Link href="/">
+          <div className="w-14 h-14 rounded-full overflow-hidden ml-12" style={{ position: 'relative', top: '8px' }}>
+            <Image src="/catt_logo.png" alt="Logo" width={40} height={40} className="object-cover" />
+          </div>
+        </Link>
+        <Link href="/">
+          <span className="ml-0 text-xl font-bold text-white cursor-pointer hover:text-gray-300">Talent Recruitment WG</span>
+        </Link>
       </div>
-    </Link>
-    <nav>
+      <nav>
       {session ? (
         <div className="flex items-center space-x-4"> {/* This container is for logged in state */}
           <span className="text-white">{session.user.name}</span>

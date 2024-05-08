@@ -108,7 +108,7 @@ export default async function handler(req, res) {
     data.name,
     expertiseList.join(', '),
     data.experience,
-    interestList.join(', '),
+    data.interests,
     data.talents,
     data.languages.join(', '),
     data.timezone,

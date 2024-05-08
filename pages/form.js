@@ -278,7 +278,7 @@ export default function ProfileForm() {
       const formData = {
         name,
         expertise: expertise.includes('Other') ? [...expertise.filter((e) => e !== 'Other'), otherExpertise] : expertise,
-        interests: interests.includes('Other') ? [...interests.filter((i) => i !== 'Other'), otherInterests] : interests,
+        interests,
         experience,
         talents,
         languages,
@@ -362,12 +362,17 @@ export default function ProfileForm() {
         <link rel="icon" href="/catt_logo.ico" />
       </Head>
       <header className="flex justify-between items-center p-1 border-b border-gray-700 backdrop-blur-md bg-opacity-30">
-    <Link href="/">
-      <div className="w-14 h-14 rounded-full overflow-hidden ml-12" style={{ position: 'relative', top: '8px' }}>
-        <Image src="/catt_logo.png" alt="Logo" width={40} height={40} className="object-cover" />
+      <div className="flex items-center">
+        <Link href="/">
+          <div className="w-14 h-14 rounded-full overflow-hidden ml-12" style={{ position: 'relative', top: '8px' }}>
+            <Image src="/catt_logo.png" alt="Logo" width={40} height={40} className="object-cover" />
+          </div>
+        </Link>
+        <Link href="/">
+          <span className="ml-0 text-xl font-bold text-white cursor-pointer hover:text-gray-300">Talent Recruitment WG</span>
+        </Link>
       </div>
-    </Link>
-    <nav>
+      <nav>
       {session ? (
         <div className="flex items-center space-x-4"> {/* This container is for logged in state */}
           <span className="text-white">{session.user.name}</span>
@@ -535,49 +540,19 @@ export default function ProfileForm() {
           </div>
 
           <div>
-          <label htmlFor="interests" className="text-sm text-v2-lily/50 font-medium0">Areas of Interest</label>
+          <label htmlFor="interests" className="text-sm text-v2-lily/50 font-medium">Areas of Interest</label>
           <div className="mt-1">
-          <button
-            type="button"
-            className="px-3 py-1.5 rounded-md flex items-center justify-center space-x-1 text-v2-lily text-xs font-semibold border border-v2-lily/20 bg-v2-lily/5 disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:bg-v2-lily/10 transition duration-300"
-            onClick={() => setShowInterestsModal(true)}
-            disabled={!session}
-          >
-            Select Interests
-          </button>
-            {errors.interests && <p className="text-red-500 text-sm mt-1">{errors.interests}</p>}
-            <div className="mt-2 flex flex-wrap gap-2">
-              {interests.map((option) => (
-                <span
-                  key={option}
-                  className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
-                >
-                  {option}
-                  <button
-                    type="button"
-                    className="flex-shrink-0 ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500"
-                    onClick={() => handleInterestsChange(option)}
-                  >
-                    <span className="sr-only">Remove {option}</span>
-                    <FaTimes className="h-2 w-2" />
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-          {interests.includes('Other') && (
-            <div className="mt-2">
-            <label htmlFor="other-interests" className="text-sm font-medium text-gray-300">Other Interests</label>
             <input
               type="text"
-              id="other-interests"
-              value={otherInterests}
-              onChange={(e) => setOtherInterests(e.target.value)}
-              placeholder="Enter your interests"
-              className="mt-1 block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500"
+              name="interests"
+              id="interests"
+              value={interests}
+              onChange={(e) => setInterests(e.target.value)}
+              className="block w-full bg-gray-800 border-gray-700 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2 disabled:opacity-30 disabled:cursor-not-allowed"
+              disabled={!session}
             />
+            {errors.interests && <p className="text-red-500 text-sm mt-1">{errors.interests}</p>}
           </div>
-          )}
         </div>
 
           <div>

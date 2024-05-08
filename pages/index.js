@@ -257,15 +257,24 @@ export default function Home() {
           </div>
         </section>
 
-        {/* About Us Section */}
-        <section className="my-16 text-center">
-          <h3 className="text-3xl md:text-4xl font-bold mb-6">About Us</h3>
-          <p className="text-md md:text-lg text-gray-400 mb-4">Lorem Ipsum</p>
-        </section>
+      {/* About Us Section */}
+      <section className="my-16 text-center px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-3xl sm:text-4xl font-bold mb-6 text-white">About Us</h3>
+          <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-1 w-32 mx-auto mb-8"></div>
+          <div className="bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+            <p className="text-lg sm:text-xl text-gray-300 mb-4">
+              <strong>We Are</strong>{' '}
+              <span className="text-indigo-400">Talent Recruitment WG</span>, abbreviated as{' '}
+              <span className="text-purple-400">TRWG</span>. We are a dedicated working group focused on finding the best talent and the perfect fit within the community to work for the interests of the DAO.
+            </p>
+          </div>
+        </div>
+      </section>
       </main>
 
       <footer className="text-center p-5 border-t border-gray-700 backdrop-blur-md bg-opacity-30 bg-black">
-        © 2024 JupRecruit Team.
+        © 2024 JupRecruit Working Group.
       </footer>
       <SpeedInsights />
     </div>

@@ -92,16 +92,17 @@ export default function Home() {
   </header>
 
 <div className="w-full h-64 sm:h-96 relative overflow-hidden border-b border-gray-700">
-  <div 
-    className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
-    style={{ 
-      backgroundImage: `url(/catt_banner.png)`,
-      backgroundSize: 'cover', // Ensure the image covers the entire area
-      backgroundRepeat: 'no-repeat', // Prevent the image from repeating
-      backgroundPosition: 'center', // Center the image within the header
-      transform: `translateY(${offsetY * 0.5}px)`, // Optional: if you need to adjust vertically
-    }}
-  />
+<div 
+  className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
+  style={{ 
+    backgroundImage: `url(/catt_banner.png)`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    transform: `translateY(${offsetY * 0.5}px)`,
+    transition: 'transform 0.5s ease-out',
+  }}
+/>
 </div>
 
       <main className="px-5 sm:px-10 md:px-20 space-y-8 sm:space-y-12 md:space-y-24 py-10">

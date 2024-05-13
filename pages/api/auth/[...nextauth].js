@@ -1,7 +1,8 @@
-// ./auth/[...nextauth].js
 import NextAuth from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 import TwitterProvider from 'next-auth/providers/twitter';
+
+const adminEmails = process.env.ADMIN_EMAILS?.split(',');
 
 export const authOptions = {
   providers: [
@@ -16,26 +17,32 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      // Perform any additional checks or store user data in your database
-      return true;
+    async signIn({ user, account, profile, email }) {
+      
+      user.email = profile.email ?? email ?? null;
+      
+      const adminEmails = process.env.ADMIN_EMAILS.split(',');
+      user.isAdmin = user.email ? adminEmails.includes(user.email) : false;
+      
+      return true; 
     },
     async redirect({ url, baseUrl }) {
-      // Customize the redirect behavior after successful authentication
       if (url.startsWith(baseUrl)) {
         return url;
       } else {
         return baseUrl;
       }
     },
-    async session({ session, user, token }) {
-      // Customize the session object if needed
+    async session({ session, token }) {
+      session.user.isAdmin = token.isAdmin ? true : false;
       return session;
-    },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      // Customize the JWT token if needed
+  },
+  async jwt({ token, user }) {
+      if (user) {  
+          token.isAdmin = user.isAdmin;
+      }
       return token;
-    },
+  },
   },
 };
 

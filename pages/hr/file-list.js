@@ -8,6 +8,7 @@ import Sidebar from '../components/Sidebar';
 import Head from 'next/head';
 import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
+import { getSession } from 'next-auth/react';
 
 export default function StorageExplorer() {
   const [folders, setFolders] = useState([]);

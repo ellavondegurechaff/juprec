@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import { useSession, getSession } from 'next-auth/react';
 import { FaSearch, FaSortAmountDown, FaSortAmountUpAlt, FaTrash } from 'react-icons/fa';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../../utils/supabaseClient';
 import Sidebar from '../components/Sidebar';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';

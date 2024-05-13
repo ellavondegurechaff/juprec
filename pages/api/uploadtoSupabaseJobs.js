@@ -2,7 +2,7 @@ import { createRouter } from 'next-connect';
 import multer from 'multer';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from './auth/[...nextauth]'; // Import your NextAuth options correctly
-import { supabase } from '../utils/supabaseClient'; // Import the Supabase client from the utils folder
+import { supabase } from '../../utils/supabaseClient'; // Import the Supabase client from the utils folder
 
 export const config = {
   api: {

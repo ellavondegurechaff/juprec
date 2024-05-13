@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { saveAs } from 'file-saver';
 import mammoth from 'mammoth';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../../utils/supabaseClient';
 import Sidebar from '../components/Sidebar';
 import Head from 'next/head';
 import { Inter } from "next/font/google";

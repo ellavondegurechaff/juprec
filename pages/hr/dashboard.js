@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 const inter = Inter({ subsets: ["latin"] });
 import { useSession, getSession } from 'next-auth/react';
 import { FaUserCircle, FaChartBar, FaUsers, FaBriefcase, FaChartPie } from 'react-icons/fa';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../../utils/supabaseClient';
 import Sidebar from '../components/Sidebar';  // Adjust path as necessary
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8c00', '#ff0080'];

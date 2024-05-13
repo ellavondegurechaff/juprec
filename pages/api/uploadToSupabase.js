@@ -1,5 +1,5 @@
 // Import the existing supabase client instead of creating a new one
-import { supabase } from '.././utils/supabaseClient'; // Adjust the path as necessary
+import { supabase } from '../../utils/supabaseClient'; // Adjust the path as necessary
 import multer from 'multer';
 import { createRouter } from 'next-connect';
 import { getServerSession } from 'next-auth/next';

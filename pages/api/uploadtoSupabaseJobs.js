@@ -1,8 +1,8 @@
 import { createRouter } from 'next-connect';
 import multer from 'multer';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from './auth/[...nextauth]'; // Import your NextAuth options correctly
-import { supabase } from '../../utils/supabaseClient'; // Import the Supabase client from the utils folder
+import { authOptions } from './auth/[...nextauth]';
+import { supabase } from '../../utils/supabaseClient';
 
 export const config = {
   api: {
@@ -12,10 +12,11 @@ export const config = {
 
 const router = createRouter();
 
-// Configure multer for file storage in memory and file size limit
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
 });
 
 router.post(upload.single('file'), async (req, res) => {
@@ -24,7 +25,6 @@ router.post(upload.single('file'), async (req, res) => {
     return;
   }
 
-  // Extract the session using getServerSession
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
     res.status(403).json({ error: 'Unauthorized access' });
@@ -32,14 +32,16 @@ router.post(upload.single('file'), async (req, res) => {
   }
 
   const { user } = session;
-  const username = user.name; // Adjust according to your session user object structure
-  const positionName = req.body.positionName; // Assume it's sent along with the file upload form
+  const username = user.name;
+  const positionName = req.body.positionName;
 
-  // Create a unique file name for the uploaded file
+  // Get the current timestamp
+  const currentTimestamp = Date.now();
+
+  // Create a unique file name with the timestamp
   const fileType = req.file.mimetype.split('/')[1];
-  const uniqueFileName = `${positionName}_${username}.${fileType}`;
+  const uniqueFileName = `${positionName}_${username}_${currentTimestamp}.${fileType}`;
 
-  // Upload file to bucket 'juprecruit' inside the folder 'workgroupresume'
   const { data, error } = await supabase.storage
     .from('juprecruit')
     .upload(`workgroupresume/${uniqueFileName}`, req.file.buffer, {

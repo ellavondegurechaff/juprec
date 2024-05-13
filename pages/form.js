@@ -655,42 +655,42 @@ export default function ProfileForm() {
               Work Preference
             </label>
             <div className="mt-1 space-y-2">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="workPreference"
+                value="Open to Volunteer"
+                checked={workPreference === "Open to Volunteer"}
+                onChange={(e) => setWorkPreference(e.target.value)}
+                className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out appearance-none rounded-full border-2 border-gray-400 checked:border-indigo-600 checked:bg-indigo-600 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed"
+                disabled={!session}
+              />
+              <span className={`ml-2 ${!session ? 'text-gray-400' : ''}`}>Open to Volunteer</span>
+            </label>
               <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="workPreference"
-                  value="Open to Volunteer"
-                  checked={workPreference === "Open to Volunteer"}
-                  onChange={(e) => setWorkPreference(e.target.value)}
-                  className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out appearance-none rounded-full border-2 border-gray-400 checked:border-indigo-600 checked:bg-indigo-600 focus:outline-none"
-                  disabled={!session}
-                />
-                <span className="ml-2">Open to Volunteer</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="workPreference"
-                  value="Part Time"
-                  checked={workPreference === "Part Time"}
-                  onChange={(e) => setWorkPreference(e.target.value)}
-                  className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out appearance-none rounded-full border-2 border-gray-400 checked:border-indigo-600 checked:bg-indigo-600 focus:outline-none"
-                  disabled={!session}
-                />
-                <span className="ml-2">Part Time</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="workPreference"
-                  value="Full Time"
-                  checked={workPreference === "Full Time"}
-                  onChange={(e) => setWorkPreference(e.target.value)}
-                  className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out appearance-none rounded-full border-2 border-gray-400 checked:border-indigo-600 checked:bg-indigo-600 focus:outline-none"
-                  disabled={!session}
-                />
-                <span className="ml-2">Full Time</span>
-              </label>
+            <input
+              type="radio"
+              name="workPreference"
+              value="Part Time"
+              checked={workPreference === "Part Time"}
+              onChange={(e) => setWorkPreference(e.target.value)}
+              className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out appearance-none rounded-full border-2 border-gray-400 checked:border-indigo-600 checked:bg-indigo-600 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed"
+              disabled={!session}
+            />
+            <span className={`ml-2 ${!session ? 'text-gray-400' : ''}`}>Part Time</span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="workPreference"
+              value="Full Time"
+              checked={workPreference === "Full Time"}
+              onChange={(e) => setWorkPreference(e.target.value)}
+              className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out appearance-none rounded-full border-2 border-gray-400 checked:border-indigo-600 checked:bg-indigo-600 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed"
+              disabled={!session}
+            />
+            <span className={`ml-2 ${!session ? 'text-gray-400' : ''}`}>Full Time</span>
+          </label>
             </div>
           </div>
           <div>
@@ -927,7 +927,7 @@ export default function ProfileForm() {
             <label
               htmlFor="resume"
               className="block text-sm font-medium text-gray-300 mb-1"
-            ></label>
+            >Resume/Portfolio</label>
             <div
               {...getRootProps()}
               role="presentation"

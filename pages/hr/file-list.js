@@ -8,7 +8,6 @@ import Sidebar from '../components/Sidebar';
 import Head from 'next/head';
 import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
-import { requireAdmin } from "../middleware";
 
 export default function StorageExplorer() {
   const [folders, setFolders] = useState([]);
@@ -290,5 +289,17 @@ export default function StorageExplorer() {
 }
 
 export async function getServerSideProps(context) {
-  return await requireAdmin(context.req, context.res);
+  const session = await getSession(context);
+  if (!session || !session.user?.isAdmin) {
+      return {
+          redirect: {
+              destination: '/unauthorized',
+              permanent: false,
+          }
+      };
+  }
+  return {
+      props: {
+      },
+  };
 }

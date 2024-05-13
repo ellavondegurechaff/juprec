@@ -7,7 +7,6 @@ import { supabase } from '../utils/supabaseClient';
 import Sidebar from '../components/Sidebar';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { requireAdmin } from "../middleware";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -360,5 +359,17 @@ export default function TalentRecruits() {
 }
 
 export async function getServerSideProps(context) {
-  return await requireAdmin(context.req, context.res);
+  const session = await getSession(context);
+  if (!session || !session.user?.isAdmin) {
+      return {
+          redirect: {
+              destination: '/unauthorized',
+              permanent: false,
+          }
+      };
+  }
+  return {
+      props: {
+      },
+  };
 }

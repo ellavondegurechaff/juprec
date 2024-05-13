@@ -7,7 +7,6 @@ import { FaUserCircle, FaChartBar, FaUsers, FaBriefcase, FaChartPie } from 'reac
 import { supabase } from '../utils/supabaseClient';
 import Sidebar from '../components/Sidebar';  // Adjust path as necessary
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { requireAdmin } from "../middleware";
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8c00', '#ff0080'];
 const LanguageOptions = ['English', 'Chinese', 'Russian', 'Japanese', 'Indonesian', 'Turkish', 'Persian', 'Vietnamese', 'French', 'Spanish', 'Italian', 'Portuguese', 'Indian', 'German', 'Filipino', 'Arabic'];
 const ExperienceOptions = ['0-2 years', '2-5 years', '5-10 years', '10+ years'];
@@ -376,5 +375,17 @@ export default function AdminDashboard() {
 }
 
 export async function getServerSideProps(context) {
-  return await requireAdmin(context.req, context.res);
+  const session = await getSession(context);
+  if (!session || !session.user?.isAdmin) {
+      return {
+          redirect: {
+              destination: '/unauthorized',
+              permanent: false,
+          }
+      };
+  }
+  return {
+      props: {
+      },
+  };
 }
